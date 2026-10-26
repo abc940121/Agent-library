@@ -60,7 +60,7 @@ Body: the detail, the condition it holds under, and how to check it.
 ## What is not an entry
 - To-dos and current state ("the quota is used up now"). They change; put them in an issue.
 - Anything that expires within 14 days.
-- Private paths, private addresses, secrets. The checker rejects drive paths, private IPs, private repo links and key-shaped strings.
+- Private paths, private addresses, secrets. The checker rejects drive paths, IPv4 addresses (except 127.0.0.1 and 0.0.0.0), key-shaped strings, 32+ hex characters, 40+ character letter-and-digit runs, and any GitHub, GitLab or Bitbucket repo link whose owner/repo is not listed in PUBLIC_REPOS.txt. To link a public repo, add it to PUBLIC_REPOS.txt in the same PR. Shorten commit hashes to 12 characters.
 
 ## Computed later (not written by hand)
 Trust (independent confirmations) and freshness (newest confirmation). Not in v1.

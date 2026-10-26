@@ -33,9 +33,17 @@ PRIVACY = [
     ("unc path", re.compile(r"\\\\[A-Za-z0-9]")),
     ("internal repo path", re.compile(r"a2a/outputs|\.scratch/")),
     ("private github url", re.compile(r"github\.com\S*-private")),
+    ("long hex string", re.compile(r"(?<![0-9A-Fa-f])[0-9A-Fa-f]{32,}(?![0-9A-Fa-f])")),
     ("secret-like token", re.compile(
         r"sk-[A-Za-z0-9]{16,}|ghp_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN")),
+    ("long hex string", re.compile(r"(?<![0-9A-Fa-f])[0-9A-Fa-f]{32,}(?![0-9A-Fa-f])")),
 ]
+# 40+ chars with letters and digits; "/" is left out so URL paths do not match.
+LONG_TOKEN = re.compile(r"[A-Za-z0-9+_=-]{40,}")
+REPO_URL = re.compile(
+    r"(?:github\.com|gitlab\.com|bitbucket\.org)/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)")
+LONG_TOKEN = re.compile(r"[A-Za-z0-9+_=-]{40,}")
+REPO_URL = re.compile(r"(?:github\.com|gitlab\.com|bitbucket\.org)/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)")
 IPV4 = re.compile(r"(?<![\d.])(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?![\d.]*\d)")
 
 
@@ -150,11 +158,28 @@ def load_scopes(root, problems):
     return scopes
 
 
-def privacy(text, name, problems):
+def load_public_repos(root):
+    p = root / "PUBLIC_REPOS.txt"
+    if not p.is_file():
+        return set()
+    lines = p.read_text(encoding="utf-8").splitlines()
+    return {x.strip().lower() for x in lines if x.strip() and not x.startswith("#")}
+
+
+def privacy(text, name, problems, public_repos=frozenset()):
     for n, line in enumerate(text.split("\n"), 1):
         for label, rx in PRIVACY:
             if rx.search(line):
                 problems.append((name, n, f"privacy: {label}"))
+        for m in LONG_TOKEN.finditer(line):
+            t = m.group(0)
+            if any(c.isdigit() for c in t) and any(c.isalpha() for c in t):
+                problems.append((name, n, "privacy: long token-like string"))
+                break
+        for m in REPO_URL.finditer(line):
+            repo = f"{m.group(1)}/{m.group(2)}".lower().removesuffix(".git")
+            if repo not in public_repos:
+                problems.append((name, n, "privacy: repo link not in PUBLIC_REPOS.txt"))
         for m in IPV4.finditer(line):
             octs = [int(x) for x in m.groups()]
             if all(o <= 255 for o in octs) and m.group(0) not in ("127.0.0.1", "0.0.0.0"):
@@ -169,12 +194,13 @@ def main(argv=None):
     root = Path(args.root)
     problems = []
     scopes = load_scopes(root, problems)
-    files = sorted((root / "entries").glob("*.md")) if (root / "entries").is_dir() else []
+    public_repos = load_public_repos(root)
+    files =sorted((root / "entries").glob("*.md")) if (root / "entries").is_dir() else []
     parsed = {}
     for f in files:
         name = f"entries/{f.name}"
         text = f.read_text(encoding="utf-8")
-        privacy(text, name, problems)
+        privacy(text, name, problems, public_repos)
         fields, where, body = parse_entry(text, problems, name)
         parsed[f.stem] = (name, fields, where, body)
         if not ID_RE.match(f.stem):

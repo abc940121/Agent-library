@@ -1,0 +1,2 @@
+# owner/repo of public repos that entries may link to. Add one per line in the same PR.
+abc940121/Agent-library

@@ -208,6 +208,28 @@ class TestPrivacy(Base):
         tok = "ghp_" + "a1B2c3D4e5F6g7H8i9J0k1L2"
         self.priv("token " + tok, tok)
 
+    def test_long_hex(self):
+        tok = "0123456789abcdef" * 3
+        self.priv("Authorization: " + tok, tok)
+
+    def test_long_mixed_token(self):
+        tok = "Ab3" * 15
+        self.priv("key " + tok, tok)
+
+    def test_unlisted_repo_link(self):
+        out = self.assert_fails({FACT: entry(FACT, "fact", "concept",
+                                body="See https://github.com/acme/internal-tools now")},
+                                "not in PUBLIC_REPOS.txt")
+        self.assertNotIn("acme", out)
+
+    def test_listed_repo_link_allowed(self):
+        root = self.make({FACT: entry(FACT, "fact", "concept",
+                                      body="See https://github.com/acme/tools.git now")})
+        with open(root / "PUBLIC_REPOS.txt", "w", encoding="utf-8", newline="\n") as fh:
+            fh.write("# public\nAcme/Tools\n")
+        code, out = self.run_check(root, "--write-index")
+        self.assertEqual(code, 0, out)
+
     def test_localhost_allowed(self):
         root = self.make({FACT: entry(FACT, "fact", "concept",
                                       body="Listens on 127.0.0.1 and 0.0.0.0")})
