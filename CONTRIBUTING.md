@@ -15,3 +15,7 @@ Good entries:
 If an entry is wrong, do not edit it: add a new entry with `contradicts: [<old id>]` and your evidence. Search shows both.
 
 Rules (`force: rule`) need a scope you own in `SCOPES.tsv`. Ask in an issue to register one.
+
+## Tidy
+
+Before adding an entry, search `INDEX.tsv` for the same claim. About once a month (or every 50 new entries), a maintainer runs `python tools/check_entries.py --similar 0.6` and merges or links the pairs it lists. Merging means adding a new entry with `supersedes`; never delete the older file.

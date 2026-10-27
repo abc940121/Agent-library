@@ -2,7 +2,9 @@
 """Checker for the library entries (standard library only)."""
 import argparse
 import datetime
+import difflib
 import re
+import string
 import sys
 from pathlib import Path
 
@@ -15,13 +17,13 @@ GOALS = {"latency", "cost", "accuracy", "failure-rate", "tokens", "time",
 KINDS = {"fact": {"concept", "data"}, "advice": {"howto", "fix", "choice"},
          "rule": {"policy"}}
 ALLOWED = {"id", "force", "kind", "kind_why", "summary", "origin", "repro",
-           "source", "domain", "tags", "negative", "contradicts", "status",
+           "source", "domain", "tags", "negative", "contradicts", "supersedes", "status",
            "expires_when", "checked_at", "added_by", "goal",
            "facts", "rule_scope", "owner"}
 ALWAYS = ["id", "force", "kind", "summary", "origin", "domain", "negative",
           "status", "checked_at", "added_by"]
 CONFIRM_KEYS = {"entry", "verdict", "by", "checked_at", "env", "repro"}
-LIST_KEYS = {"domain", "tags", "contradicts", "facts", "env"}
+LIST_KEYS = {"domain", "tags", "contradicts", "supersedes", "facts", "env"}
 NUM_WORDS = {"one", "two", "three", "four", "five", "six", "seven", "eight",
              "nine", "ten", "hundred", "thousand", "million", "half", "twice",
              "percent"}
@@ -188,10 +190,29 @@ def privacy(text, name, problems, public_repos=frozenset()):
                 problems.append((name, n, "privacy: ipv4 address"))
 
 
+def normalise_summary(summary):
+    summary = summary.lower().translate(str.maketrans("", "", string.punctuation))
+    return " ".join(summary.split())
+
+
+def near_duplicate_pairs(parsed, threshold):
+    items = [(stem, normalise_summary(fields.get("summary", "")))
+             for stem, (_, fields, _, _) in sorted(parsed.items())]
+    for i, (id1, summary1) in enumerate(items):
+        for id2, summary2 in items[i + 1:]:
+            matcher = difflib.SequenceMatcher(None, summary1, summary2)
+            if matcher.real_quick_ratio() < threshold or matcher.quick_ratio() < threshold:
+                continue
+            ratio = matcher.ratio()
+            if ratio >= threshold:
+                yield id1, id2, ratio, summary1, summary2
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default=str(Path(__file__).resolve().parent.parent))
     ap.add_argument("--write-index", action="store_true")
+    ap.add_argument("--similar", type=float, metavar="THRESHOLD")
     args = ap.parse_args(argv)
     root = Path(args.root)
     problems = []
@@ -207,6 +228,14 @@ def main(argv=None):
         parsed[f.stem] = (name, fields, where, body)
         if not ID_RE.match(f.stem):
             problems.append((name, 0, "file name must be <ID>.md with ID like E-20261026-ab12"))
+    if args.similar is not None:
+        if not 0 <= args.similar <= 1:
+            ap.error("--similar must be between 0 and 1")
+        pairs = sorted(near_duplicate_pairs(parsed, args.similar),
+                       key=lambda pair: (-pair[2], pair[0], pair[1]))
+        for id1, id2, ratio, summary1, summary2 in pairs:
+            print(f"{ratio:.2f}\t{id1}\t{id2}\t{summary1}\t{summary2}")
+        return 0
     forces = {s: p[1].get("force") for s, p in parsed.items()}
 
     confirmations = {stem: {} for stem in parsed}
@@ -300,6 +329,11 @@ def main(argv=None):
         for x in F.get("contradicts", []):
             if x not in parsed:
                 add("contradicts", f"{x} does not exist")
+        for x in F.get("supersedes", []):
+            if x not in parsed:
+                add("supersedes", f"{x} does not exist")
+            elif x == stem:
+                add("supersedes", "must not list itself")
         if force == "advice":
             goal = F.get("goal", "")
             # a fix's goal is the symptom gone, so it may say goal: symptom
@@ -333,6 +367,16 @@ def main(argv=None):
             for k in ("rule_scope", "owner"):
                 if k in F:
                     add(k, "only allowed on rule entries")
+
+    for id1, id2, ratio, _, _ in near_duplicate_pairs(parsed, 0.85):
+        fields1, fields2 = parsed[id1][1], parsed[id2][1]
+        links1 = set(fields1.get("contradicts", [])) | set(fields1.get("supersedes", []))
+        links2 = set(fields2.get("contradicts", [])) | set(fields2.get("supersedes", []))
+        if id2 not in links1 and id1 not in links2:
+            name, where = parsed[id2][0], parsed[id2][2]
+            problems.append((name, where.get("summary", 0),
+                             f"summary: near-duplicate of {id1} (ratio {ratio:.2f}); "
+                             "merge, or link it with contradicts/supersedes"))
 
     def clean(s):
         return s.replace("\t", " ")

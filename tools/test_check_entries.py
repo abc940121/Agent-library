@@ -161,6 +161,46 @@ class TestFields(Base):
                                        source="http://x.org")}, "source")
 
 
+class TestDuplicates(Base):
+    def pair(self, second_summary, **extra):
+        return {
+            FACT: entry(FACT, "fact", "concept"),
+            FACT2: entry(FACT2, "fact", "concept", summary=second_summary, **extra),
+        }
+
+    def test_identical_summary_rejected(self):
+        self.assert_fails(self.pair(SUMMARIES["concept"]), "near-duplicate of")
+
+    def test_supersedes_link_accepts_duplicate(self):
+        root = self.make(self.pair(SUMMARIES["concept"], supersedes=f"[{FACT}]"))
+        code, out = self.run_check(root, "--write-index")
+        self.assertEqual(code, 0, out)
+
+    def test_contradicts_link_accepts_duplicate(self):
+        root = self.make(self.pair(SUMMARIES["concept"], contradicts=f"[{FACT}]"))
+        code, out = self.run_check(root, "--write-index")
+        self.assertEqual(code, 0, out)
+
+    def test_clearly_different_summaries_accepted(self):
+        root = self.make(self.pair("A database backup restores data after a storage failure"))
+        code, out = self.run_check(root, "--write-index")
+        self.assertEqual(code, 0, out)
+
+    def test_supersedes_missing_rejected(self):
+        self.assert_fails(self.one(entry(FACT, "fact", "concept", supersedes="[E-20261026-ffff]")),
+                          "E-20261026-ffff does not exist")
+
+    def test_supersedes_self_rejected(self):
+        self.assert_fails(self.one(entry(FACT, "fact", "concept", supersedes=f"[{FACT}]")),
+                          "must not list itself")
+
+    def test_similar_prints_pair_and_exits_zero(self):
+        root = self.make(self.pair(SUMMARIES["concept"]))
+        code, out = self.run_check(root, "--similar", "0.6")
+        self.assertEqual(code, 0, out)
+        self.assertIn(f"\t{FACT}\t{FACT2}\t", out)
+
+
 class TestTemplates(Base):
     def bad(self, force, kind, summary, **extra):
         es = good_set()
