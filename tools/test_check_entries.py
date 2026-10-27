@@ -141,6 +141,17 @@ class TestFields(Base):
 
     def test_critical_open_accepted(self):
         es = good_set(); es[HOWTO] = entry(HOWTO, "advice", "howto", layer="info", goal="tokens", facts=f"[{FACT}]"); es[CHOICE] = entry(CHOICE, "advice", "choice", layer="info", goal="latency", facts=f"[{DATA}]"); es[FACT] = entry(FACT, "fact", "concept", layer="critical", exceptions="Rare cases can make this broad claim fail", status="open", **{"from": f"[{HOWTO}, {CHOICE}]"})
+        code, out = self.run_check(self.make(es), "--write-index")
+        self.assertEqual(code, 0, out)
+
+    def test_critical_settled_with_dispute_rejected(self):
+        es = good_set(); es[HOWTO] = entry(HOWTO, "advice", "howto", layer="info", goal="tokens", facts=f"[{FACT}]"); es[CHOICE] = entry(CHOICE, "advice", "choice", layer="info", goal="latency", facts=f"[{DATA}]"); es[FACT] = entry(FACT, "fact", "concept", layer="critical", exceptions="Rare cases can make this broad claim fail", **{"from": f"[{HOWTO}, {CHOICE}]"})
+        root = self.make(es); p = root / "confirms" / FACT; p.mkdir(parents=True)
+        for user in ("bob", "carol"):
+            (p / f"{user}-20261026-ab12.md").write_text(confirm(user=user), encoding="utf-8", newline="\n")
+        (p / "dave-20261027-cd34.md").write_text(confirm(user="dave", verdict="dispute", repro="run x; got y", date="2026-10-27"), encoding="utf-8", newline="\n")
+        code, out = self.run_check(root, "--write-index")
+        self.assertEqual(code, 1); self.assertIn("critical entry with a dispute must be open", out)
 
     def law_set(self, **extra):
         es = good_set()
@@ -205,6 +216,14 @@ class TestFields(Base):
         self.add_confirm = root / "confirms" / FACT / "bob-20261026-ab12.md"; self.add_confirm.parent.mkdir(parents=True); self.add_confirm.write_text(confirm(), encoding="utf-8", newline="\n")
         code, out = self.run_check(root, "--write-index")
         self.assertEqual(code, 0, out)
+
+    def test_raw_measured_settled_with_dispute_rejected(self):
+        root = self.make({FACT: entry(FACT, "fact", "concept", origin="measured", repro="run the check")})
+        p = root / "confirms" / FACT; p.mkdir(parents=True)
+        (p / "bob-20261026-ab12.md").write_text(confirm(), encoding="utf-8", newline="\n")
+        (p / "carol-20261027-cd34.md").write_text(confirm(user="carol", verdict="dispute", repro="run x; got y", date="2026-10-27"), encoding="utf-8", newline="\n")
+        code, out = self.run_check(root, "--write-index")
+        self.assertEqual(code, 1); self.assertIn("raw measured entry with a dispute must be open", out)
 
     def test_raw_quoted_settled_accepted(self):
         root = self.make({FACT: entry(FACT, "fact", "concept", origin="quoted", source="https://example.com")})

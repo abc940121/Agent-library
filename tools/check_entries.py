@@ -366,8 +366,8 @@ def main(argv=None):
                        if u != F.get("added_by")}
             if F.get("status") == "settled" and sum(v[1] == "confirm" for v in current.values()) < 2:
                 add("status", "a critical entry needs 2 confirms from other users before settled")
-            if F.get("status") != "settled" and sum(v[1] == "confirm" for v in current.values()) >= 2:
-                pass
+            if F.get("status") == "settled" and any(v[1] == "dispute" for v in current.values()):
+                add("status", "a critical entry with a dispute must be open; fix it or add the case to exceptions")
         if layer == "law":
             critical_evidence = [x for x in evidence if x in parsed and
                                  parsed[x][1].get("layer") in ("critical", "law")]
@@ -389,6 +389,8 @@ def main(argv=None):
                        if u != F.get("added_by")}
             if sum(v[1] == "confirm" for v in current.values()) < 1:
                 add("status", "a raw measured entry needs 1 confirm from another user before settled")
+            if any(v[1] == "dispute" for v in current.values()):
+                add("status", "a raw measured entry with a dispute must be open")
         if force == "advice":
             goal = F.get("goal", "")
             # a fix's goal is the symptom gone, so it may say goal: symptom
