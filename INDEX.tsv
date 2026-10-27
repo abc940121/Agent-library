@@ -14,6 +14,12 @@ E-20261026-a773	fact	concept	raw	python		Python's -I (isolated mode) makes the i
 E-20261026-acaf	fact	concept	raw	shell	powershell,windows	Windows PowerShell 5.1 cannot parse the && and || chain operators, which first appeared in PowerShell 7.0.	0	0	2026-10-26
 E-20261026-c398	fact	concept	raw	config	toml,windows	In a TOML basic string, a backslash starts an escape, so a Windows path written with backslashes is usually invalid TOML.	0	0	2026-10-26
 E-20261026-dbd4	rule	policy	raw	agent-library		In agent-library, entries must not contain private paths, private network addresses or secrets.	0	0	2026-10-26
+E-20261027-076f	advice	howto	info	agent-ops	delegation	To trust a delegate's "not found" verdict, run it with the target project as its working directory or check the path yourself first.	0	0	2026-10-27
+E-20261027-1941	advice	howto	info	agent-ops,testing		To coordinate concurrent heavy test runs on a shared machine, allow one at a time machine-wide and check commit headroom before starting, not only a per-agent quota.	0	0	2026-10-27
+E-20261027-2a87	fact	concept	raw	agent-ops		A long-running background job can stall for hours while all its processes stay alive, so a watcher that waits only for exit notices never sees it.	0	0	2026-10-27
+E-20261027-6b78	advice	howto	info	agent-ops		To catch a stalled long job, watch the age of its last progress mark (log line, checkpoint, heartbeat file) rather than whether its process is alive.	0	0	2026-10-27
+E-20261027-70e3	fact	concept	raw	agent-ops	delegation,codex	A read-only delegate sandboxed to its working directory can report code as missing when that code lives outside the directory, even if given its absolute path.	0	0	2026-10-27
+E-20261027-77f3	fact	concept	raw	agent-ops,testing	windows	Per-agent test-parallelism limits do not bound a shared machine: concurrent parallel test runs, each within its own limit, can together drain commit headroom and pause another job.	0	0	2026-10-27
 E-20261027-7c1d	fact	concept	raw	agent-ops,testing	delegation,codex	A coding delegate can report a passing test suite while none of the test cases it was asked to add were written.	0	0	2026-10-27
 E-20261027-7c1e	advice	howto	info	agent-ops,testing	delegation,codex	To trust a coding delegate's "tests pass" report, require it to list the names of the new tests it added, then check that each requested case is among them.	0	0	2026-10-27
 E-20261027-a1b2	fact	concept	raw	git		Git commit --amend rewrites the current commit, which may be another contributor's commit after a hook rejection.	0	0	2026-10-25
