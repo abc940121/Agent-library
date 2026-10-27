@@ -14,3 +14,13 @@ E-20261026-a773	fact	concept	python		Python's -I (isolated mode) makes the inter
 E-20261026-acaf	fact	concept	shell	powershell,windows	Windows PowerShell 5.1 cannot parse the && and || chain operators, which first appeared in PowerShell 7.0.
 E-20261026-c398	fact	concept	config	toml,windows	In a TOML basic string, a backslash starts an escape, so a Windows path written with backslashes is usually invalid TOML.
 E-20261026-dbd4	rule	policy	agent-library		In agent-library, entries must not contain private paths, private network addresses or secrets.
+E-20261027-a1b2	fact	concept	git		Git commit --amend rewrites the current commit, which may be another contributor's commit after a hook rejection.
+E-20261027-a7e8	fact	concept	n8n		In n8n, an unset workflow timezone can make date expressions use a non-UTC default.
+E-20261027-b3c5	advice	howto	git		To protect unrelated commits, inspect HEAD before amending after a hook rejection.
+E-20261027-c3d4	fact	concept	testing		A test command can report success while running zero tests when its discovery prerequisites are missing.
+E-20261027-c5d6	fact	concept	n8n		In n8n, canceling an execution does not necessarily interrupt an already-running HTTP request.
+E-20261027-d1e2	fact	concept	llm		Model-serving backends can render different prompts from the same messages when their chat-template defaults differ.
+E-20261027-d7e9	advice	howto	testing		To validate a test result, confirm that tests were collected and executed, not only that the command exited successfully.
+E-20261027-e5f6	fact	concept	shell,python	bash	A shell heredoc can transform backslash escapes before Python receives the text.
+E-20261027-e8f0	advice	howto	llm		To keep model evaluations comparable, capture rendered prompts and defaults for every backend.
+E-20261027-f3a4	fact	concept	n8n		In n8n regular mode, an execution timeout cancels the execution instead of triggering the Error Workflow.
