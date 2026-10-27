@@ -17,6 +17,7 @@ POLICY = "E-20261026-c001"
 BASE = {
     "origin": "guess", "domain": "[n8n]", "tags": "[]", "negative": "no",
     "status": "settled", "checked_at": "2026-10-26", "added_by": "gh:alice",
+    "layer": "raw",
 }
 
 SUMMARIES = {
@@ -105,6 +106,109 @@ class TestValid(Base):
 
 
 class TestFields(Base):
+    def test_layer_missing_rejected(self):
+        self.assert_fails({FACT: entry(FACT, "fact", "concept", drop=("layer",))}, "layer")
+
+    def test_layer_bad_value_rejected(self):
+        self.assert_fails({FACT: entry(FACT, "fact", "concept", layer="deep")}, "must be raw, info, critical or law")
+
+    def test_info_without_evidence_rejected(self):
+        self.assert_fails({FACT: entry(FACT, "fact", "concept", layer="info")}, "info needs at least 1 evidence id")
+
+    def test_info_with_facts_accepted(self):
+        root = self.make({FACT: entry(FACT, "fact", "concept"), HOWTO: entry(HOWTO, "advice", "howto", layer="info", goal="tokens", facts=f"[{FACT}]")})
+        code, out = self.run_check(root, "--write-index")
+        self.assertEqual(code, 0, out)
+
+    def test_info_with_from_accepted(self):
+        root = self.make({FACT: entry(FACT, "fact", "concept"), FACT2: entry(FACT2, "fact", "concept", summary="A database backup restores data after a storage failure", layer="info", **{"from": f"[{FACT}]"})})
+        code, out = self.run_check(root, "--write-index")
+        self.assertEqual(code, 0, out)
+
+    def test_from_missing_id_rejected(self):
+        self.assert_fails({FACT: entry(FACT, "fact", "concept", layer="info", **{"from": "[E-20261026-ffff]"})}, "does not exist")
+
+    def test_from_self_rejected(self):
+        self.assert_fails({FACT: entry(FACT, "fact", "concept", layer="info", **{"from": f"[{FACT}]"})}, "must not list itself")
+
+    def test_critical_needs_two_info_evidence(self):
+        es = {FACT: entry(FACT, "fact", "concept", layer="critical", exceptions="Rare cases can make this broad claim fail", **{"from": f"[{FACT2}]"}), FACT2: entry(FACT2, "fact", "concept")}
+        self.assert_fails(es, "critical needs at least 2")
+
+    def test_critical_settled_needs_two_confirms(self):
+        es = good_set(); es[HOWTO] = entry(HOWTO, "advice", "howto", layer="info", goal="tokens", facts=f"[{FACT}]"); es[CHOICE] = entry(CHOICE, "advice", "choice", layer="info", goal="latency", facts=f"[{DATA}]"); es[FACT] = entry(FACT, "fact", "concept", layer="critical", exceptions="Rare cases can make this broad claim fail", **{"from": f"[{HOWTO}, {CHOICE}]"})
+        self.assert_fails(es, "critical entry needs 2 confirms")
+
+    def test_critical_open_accepted(self):
+        es = good_set(); es[HOWTO] = entry(HOWTO, "advice", "howto", layer="info", goal="tokens", facts=f"[{FACT}]"); es[CHOICE] = entry(CHOICE, "advice", "choice", layer="info", goal="latency", facts=f"[{DATA}]"); es[FACT] = entry(FACT, "fact", "concept", layer="critical", exceptions="Rare cases can make this broad claim fail", status="open", **{"from": f"[{HOWTO}, {CHOICE}]"})
+
+    def law_set(self, **extra):
+        es = good_set()
+        es[HOWTO] = entry(HOWTO, "advice", "howto", layer="info", goal="tokens", facts=f"[{DATA}]")
+        es[CHOICE] = entry(CHOICE, "advice", "choice", layer="info", goal="latency", facts=f"[{DATA}]")
+        es[FACT] = entry(FACT, "fact", "concept", layer="critical",
+                          exceptions="Rare cases can make this broad claim fail",
+                          status="open", **{"from": f"[{HOWTO}, {CHOICE}]"})
+        es[DATA] = entry(DATA, "fact", "data", layer="critical",
+                         exceptions="Rare cases can make this broad claim fail",
+                         status="open", **{"from": f"[{HOWTO}, {CHOICE}]"})
+        es[FIX] = entry(FIX, "fact", "concept", summary="A database backup restores data after a storage failure", layer="law",
+                        holds_when="The stated conditions are true for every case",
+                        status="open", **{"from": f"[{FACT}, {DATA}]"})
+        es.update(extra)
+        return es
+
+    def test_critical_without_exceptions_rejected(self):
+        self.assert_fails({FACT: entry(FACT, "fact", "concept", layer="critical", **{"from": f"[{FACT2}]"}), FACT2: entry(FACT2, "fact", "concept")}, "critical needs non-empty exceptions")
+
+    def test_law_without_holds_when_rejected(self):
+        es = self.law_set(); es[FIX] = entry(FIX, "fact", "concept", layer="law", **{"from": f"[{FACT}, {DATA}]"})
+        self.assert_fails(es, "law needs non-empty holds_when")
+
+    def test_holds_when_on_non_law_rejected(self):
+        self.assert_fails({FACT: entry(FACT, "fact", "concept", holds_when="The stated conditions are true for every case")}, "only allowed on law")
+
+    def test_law_with_exceptions_rejected(self):
+        es = self.law_set(); es[FIX] = entry(FIX, "fact", "concept", layer="law", holds_when="The stated conditions are true for every case", exceptions="Rare cases can make this broad claim fail", **{"from": f"[{FACT}, {DATA}]"})
+        self.assert_fails(es, "not allowed on law")
+
+    def test_law_needs_two_critical_evidence(self):
+        es = self.law_set(); es[FIX] = entry(FIX, "fact", "concept", layer="law", holds_when="The stated conditions are true for every case", **{"from": f"[{HOWTO}, {CHOICE}]"})
+        self.assert_fails(es, "law needs at least 2 evidence")
+
+    def test_law_settled_needs_three_confirms_two_envs(self):
+        es = self.law_set(); es[FIX] = entry(FIX, "fact", "concept", layer="law", holds_when="The stated conditions are true for every case", status="settled", **{"from": f"[{FACT}, {DATA}]"})
+        root = self.make(es); p = root / "confirms" / FIX; p.mkdir(parents=True)
+        for user, env in (("bob", "linux"), ("carol", "linux")):
+            (p / f"{user}-20261026-ab12.md").write_text(confirm(entry_id=FIX, user=user, env=f"[{env}]") , encoding="utf-8", newline="\n")
+        code, out = self.run_check(root, "--write-index")
+        self.assertEqual(code, 1); self.assertIn("law entry needs 3 confirms", out)
+
+    def test_law_settled_with_dispute_rejected(self):
+        es = self.law_set(); es[FIX] = entry(FIX, "fact", "concept", layer="law", holds_when="The stated conditions are true for every case", status="settled", **{"from": f"[{FACT}, {DATA}]"})
+        root = self.make(es); p = root / "confirms" / FIX; p.mkdir(parents=True)
+        for user, env in (("bob", "linux"), ("carol", "windows"), ("dave", "linux")):
+            (p / f"{user}-20261026-ab12.md").write_text(confirm(entry_id=FIX, user=user, env=f"[{env}]"), encoding="utf-8", newline="\n")
+        (p / "dave-20261027-cd34.md").write_text(confirm(entry_id=FIX, user="dave", env="[linux]", verdict="dispute", repro="run x; got y", date="2026-10-27"), encoding="utf-8", newline="\n")
+        code, out = self.run_check(root, "--write-index")
+        self.assertEqual(code, 1); self.assertIn("a law with a dispute must be open", out)
+
+    def test_law_open_accepted(self):
+        es = self.law_set(); self.assertEqual(self.run_check(self.make(es), "--write-index")[0], 0)
+        self.assertEqual(self.run_check(self.make(es), "--write-index")[0], 0)
+
+    def test_raw_measured_settled_rejected(self):
+        self.assert_fails({FACT: entry(FACT, "fact", "concept", origin="measured")}, "raw measured entry needs 1 confirm")
+
+    def test_raw_measured_settled_with_confirm_accepted(self):
+        root = self.make({FACT: entry(FACT, "fact", "concept", origin="measured", repro="run the check")})
+        self.add_confirm = root / "confirms" / FACT / "bob-20261026-ab12.md"; self.add_confirm.parent.mkdir(parents=True); self.add_confirm.write_text(confirm(), encoding="utf-8", newline="\n")
+        code, out = self.run_check(root, "--write-index")
+        self.assertEqual(code, 0, out)
+
+    def test_raw_quoted_settled_accepted(self):
+        root = self.make({FACT: entry(FACT, "fact", "concept", origin="quoted", source="https://example.com")})
+        self.assertEqual(self.run_check(root, "--write-index")[0], 0)
     def test_missing_required_field(self):
         self.assert_fails({FACT: entry(FACT, "fact", "concept", drop=("status",))},
                           "status")
@@ -298,10 +402,14 @@ class TestIndex(Base):
         root = self.make(good_set())
         self.run_check(root, "--write-index")
         rows = (root / "INDEX.tsv").read_text(encoding="utf-8").splitlines()
-        self.assertEqual(rows[0], "id\tforce\tkind\tdomain\ttags\tsummary\tconfirms\tdisputes\tlast_checked")
+        self.assertEqual(rows[0], "id\tforce\tkind\tlayer\tdomain\ttags\tsummary\tconfirms\tdisputes\tlast_checked")
         ids = [r.split("\t")[0] for r in rows[1:]]
         self.assertEqual(ids, sorted(ids))
         self.assertEqual(len(ids), 6)
+
+    def test_index_has_layer_column(self):
+        root = self.make(good_set()); self.run_check(root, "--write-index")
+        self.assertEqual((root / "INDEX.tsv").read_text(encoding="utf-8").splitlines()[0].split("\t")[3], "layer")
 
 
 def confirm(entry_id=FACT, verdict="confirm", user="bob", date="2026-10-26",

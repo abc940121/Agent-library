@@ -1,4 +1,4 @@
-# Entry spec (v1)
+# Entry spec (v2)
 
 `tools/check_entries.py` enforces everything on this page. If this page and the checker disagree, open an issue.
 
@@ -29,6 +29,7 @@ Body: the detail, the condition it holds under, and how to check it.
 | id | always | equals the file name |
 | force | always | fact, advice, rule |
 | kind | always | fact: concept or data. advice: howto, fix or choice. rule: policy. Or `other` with `kind_why`. |
+| layer | always | raw, info, critical, or law; how much evidence stands behind the claim |
 | summary | always | one line, 20-200 characters, in the kind's template |
 | origin | always | measured (needs `repro`), quoted (needs `source`, an https link), guess |
 | domain | always | 1-2 lowercase slugs |
@@ -41,6 +42,9 @@ Body: the detail, the condition it holds under, and how to check it.
 | added_by | always | `gh:<github-user>` |
 | goal | advice | one of: latency, cost, accuracy, failure-rate, tokens, time, memory, reliability, security, maintainability. A fix may use `symptom`. |
 | facts | advice | IDs of fact entries the advice rests on; at least one for howto and choice |
+| from | optional | Evidence IDs; combined with `facts` for the layer evidence set |
+| exceptions | critical | One-line known cases where the claim fails, 10-300 characters |
+| holds_when | law | One-line conditions under which the claim always holds, 10-300 characters |
 | rule_scope, owner | rule | the scope must be in `SCOPES.tsv` and the owner listed for it |
 
 ## Summary templates
@@ -57,6 +61,15 @@ Body: the detail, the condition it holds under, and how to check it.
 - A comparison: a measured number makes it data; else "For <goal> ... because" makes it choice; else concept.
 - Only advice and rules may be imperative.
 - "X can improve Y" is two entries: a fact for the claim, and a howto that links to it.
+
+## Layers
+
+- `raw` is one observation, measurement, or source statement; it needs no evidence list.
+- `info` is a conclusion drawn from other entries; it needs at least one evidence ID from `from` or `facts`.
+- `critical` is an underlying rule explaining many cases; it needs at least two evidence IDs whose entries are `info`, and it lists its known exceptions. It must have at least two distinct other-user confirms before `settled`; otherwise it must be `open`.
+- `law` is a claim that always holds inside stated conditions; it needs at least two evidence IDs whose entries are `critical` or `law`, and states those conditions in `holds_when`. It cannot list exceptions. `settled` requires at least three distinct other-user confirms across at least two environment slugs and no disputes; otherwise it must be `open`.
+
+Evidence IDs are the union of `from` and `facts`; every ID must exist and must not be the entry itself. A `raw` entry with `origin: measured` needs at least one confirm from another user before `settled`; otherwise it must be `open`.
 
 ## What is not an entry
 - To-dos and current state ("the quota is used up now"). They change; put them in an issue.
