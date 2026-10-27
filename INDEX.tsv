@@ -1,26 +1,26 @@
-id	force	kind	domain	tags	summary
-E-20261026-1f35	advice	howto	config	toml,windows	To write Windows paths in TOML, use forward slashes or a single-quoted literal string.
-E-20261026-204d	advice	fix	python	windows	When a Windows path in Python source raises a unicode escape error, write it with forward slashes or as a raw string.
-E-20261026-3b3c	fact	concept	agent-ops		A change to an agent's launch config does not reach agent processes that were already running before the change.
-E-20261026-3f1c	fact	concept	shell	bash	A shell pipeline's exit status is that of its last command, so "cmd | tail" hides a failure of cmd unless pipefail is set.
-E-20261026-4919	advice	howto	agent-ops		To confirm that a config change took effect, check each running process's command line or log rows, not the config file.
-E-20261026-4ba0	fact	concept	python	windows	Python's open() in text mode on Windows turns each "\n" written into "\r\n" unless the newline argument is set.
-E-20261026-5765	advice	howto	python	windows,git	To keep line endings unchanged when a Python script rewrites files on Windows, open them with newline="" or newline="\n".
-E-20261026-601e	advice	howto	shell	bash	To see failures of piped commands in bash, run set -o pipefail first, or check the command's exit code before trimming its output.
-E-20261026-76b6	fact	concept	python	windows	In a normal Python string, \U starts an 8-hex-digit escape, so a Windows path containing \Users raises a SyntaxError.
-E-20261026-863a	fact	concept	python	windows	Before Python 3.15, Python on Windows encodes redirected stdout in the ANSI code page (such as cp950), not UTF-8.
-E-20261026-90d8	advice	howto	python	windows	To print non-ASCII text from Python through a pipe on Windows, run it with -X utf8, which also works under -I.
-E-20261026-a773	fact	concept	python		Python's -I (isolated mode) makes the interpreter ignore all PYTHON* environment variables, including PYTHONIOENCODING.
-E-20261026-acaf	fact	concept	shell	powershell,windows	Windows PowerShell 5.1 cannot parse the && and || chain operators, which first appeared in PowerShell 7.0.
-E-20261026-c398	fact	concept	config	toml,windows	In a TOML basic string, a backslash starts an escape, so a Windows path written with backslashes is usually invalid TOML.
-E-20261026-dbd4	rule	policy	agent-library		In agent-library, entries must not contain private paths, private network addresses or secrets.
-E-20261027-a1b2	fact	concept	git		Git commit --amend rewrites the current commit, which may be another contributor's commit after a hook rejection.
-E-20261027-a7e8	fact	concept	n8n		In n8n, an unset workflow timezone can make date expressions use a non-UTC default.
-E-20261027-b3c5	advice	howto	git		To protect unrelated commits, inspect HEAD before amending after a hook rejection.
-E-20261027-c3d4	fact	concept	testing		A test command can report success while running zero tests when its discovery prerequisites are missing.
-E-20261027-c5d6	fact	concept	n8n		In n8n, canceling an execution does not necessarily interrupt an already-running HTTP request.
-E-20261027-d1e2	fact	concept	llm		Model-serving backends can render different prompts from the same messages when their chat-template defaults differ.
-E-20261027-d7e9	advice	howto	testing		To validate a test result, confirm that tests were collected and executed, not only that the command exited successfully.
-E-20261027-e5f6	fact	concept	shell,python	bash	A shell heredoc can transform backslash escapes before Python receives the text.
-E-20261027-e8f0	advice	howto	llm		To keep model evaluations comparable, capture rendered prompts and defaults for every backend.
-E-20261027-f3a4	fact	concept	n8n		In n8n regular mode, an execution timeout cancels the execution instead of triggering the Error Workflow.
+id	force	kind	domain	tags	summary	confirms	disputes	last_checked
+E-20261026-1f35	advice	howto	config	toml,windows	To write Windows paths in TOML, use forward slashes or a single-quoted literal string.	0	0	2026-10-26
+E-20261026-204d	advice	fix	python	windows	When a Windows path in Python source raises a unicode escape error, write it with forward slashes or as a raw string.	0	0	2026-10-26
+E-20261026-3b3c	fact	concept	agent-ops		A change to an agent's launch config does not reach agent processes that were already running before the change.	0	0	2026-10-26
+E-20261026-3f1c	fact	concept	shell	bash	A shell pipeline's exit status is that of its last command, so "cmd | tail" hides a failure of cmd unless pipefail is set.	0	0	2026-10-26
+E-20261026-4919	advice	howto	agent-ops		To confirm that a config change took effect, check each running process's command line or log rows, not the config file.	0	0	2026-10-26
+E-20261026-4ba0	fact	concept	python	windows	Python's open() in text mode on Windows turns each "\n" written into "\r\n" unless the newline argument is set.	0	0	2026-10-26
+E-20261026-5765	advice	howto	python	windows,git	To keep line endings unchanged when a Python script rewrites files on Windows, open them with newline="" or newline="\n".	0	0	2026-10-26
+E-20261026-601e	advice	howto	shell	bash	To see failures of piped commands in bash, run set -o pipefail first, or check the command's exit code before trimming its output.	0	0	2026-10-26
+E-20261026-76b6	fact	concept	python	windows	In a normal Python string, \U starts an 8-hex-digit escape, so a Windows path containing \Users raises a SyntaxError.	0	0	2026-10-26
+E-20261026-863a	fact	concept	python	windows	Before Python 3.15, Python on Windows encodes redirected stdout in the ANSI code page (such as cp950), not UTF-8.	0	0	2026-10-26
+E-20261026-90d8	advice	howto	python	windows	To print non-ASCII text from Python through a pipe on Windows, run it with -X utf8, which also works under -I.	0	0	2026-10-26
+E-20261026-a773	fact	concept	python		Python's -I (isolated mode) makes the interpreter ignore all PYTHON* environment variables, including PYTHONIOENCODING.	0	0	2026-10-26
+E-20261026-acaf	fact	concept	shell	powershell,windows	Windows PowerShell 5.1 cannot parse the && and || chain operators, which first appeared in PowerShell 7.0.	0	0	2026-10-26
+E-20261026-c398	fact	concept	config	toml,windows	In a TOML basic string, a backslash starts an escape, so a Windows path written with backslashes is usually invalid TOML.	0	0	2026-10-26
+E-20261026-dbd4	rule	policy	agent-library		In agent-library, entries must not contain private paths, private network addresses or secrets.	0	0	2026-10-26
+E-20261027-a1b2	fact	concept	git		Git commit --amend rewrites the current commit, which may be another contributor's commit after a hook rejection.	0	0	2026-10-25
+E-20261027-a7e8	fact	concept	n8n		In n8n, an unset workflow timezone can make date expressions use a non-UTC default.	0	0	2026-10-24
+E-20261027-b3c5	advice	howto	git		To protect unrelated commits, inspect HEAD before amending after a hook rejection.	0	0	2026-10-25
+E-20261027-c3d4	fact	concept	testing		A test command can report success while running zero tests when its discovery prerequisites are missing.	0	0	2026-10-24
+E-20261027-c5d6	fact	concept	n8n		In n8n, canceling an execution does not necessarily interrupt an already-running HTTP request.	0	0	2026-10-24
+E-20261027-d1e2	fact	concept	llm		Model-serving backends can render different prompts from the same messages when their chat-template defaults differ.	0	0	2026-10-25
+E-20261027-d7e9	advice	howto	testing		To validate a test result, confirm that tests were collected and executed, not only that the command exited successfully.	0	0	2026-10-24
+E-20261027-e5f6	fact	concept	shell,python	bash	A shell heredoc can transform backslash escapes before Python receives the text.	0	0	2026-10-25
+E-20261027-e8f0	advice	howto	llm		To keep model evaluations comparable, capture rendered prompts and defaults for every backend.	0	0	2026-10-25
+E-20261027-f3a4	fact	concept	n8n		In n8n regular mode, an execution timeout cancels the execution instead of triggering the Error Workflow.	0	0	2026-10-24

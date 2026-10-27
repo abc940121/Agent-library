@@ -3,6 +3,7 @@ import argparse, json, re, sys
 from pathlib import Path
 
 ENTRY_RE = re.compile(r"^entries/E-[0-9]{8}-[0-9a-f]{4}\.md$")
+CONFIRM_RE = re.compile(r"^confirms/(E-[0-9]{8}-[0-9a-f]{4})/([A-Za-z0-9][A-Za-z0-9-]*)-[0-9]{8}-[0-9a-f]{4}\.md$")
 STATUSES = {"added", "modified", "removed", "renamed"}
 
 def refusal(status, path, reason):
@@ -46,6 +47,7 @@ def main(argv=None):
     ap.add_argument("--expected-count", type=int)
     ap.add_argument("--public-repos-base", type=Path)
     ap.add_argument("--public-repos-head", type=Path)
+    ap.add_argument("--author")
     a = ap.parse_args(argv)
     if a.maintainer: print("OK (maintainer)"); return 0
     if a.files_json is None or a.expected_count is None:
@@ -64,6 +66,8 @@ def main(argv=None):
         if unsafe(path): refused.append(refusal(status, path, "filename is not safe")); continue
         if previous is not None and unsafe(previous): refused.append(refusal(status, previous, "previous_filename is not safe")); continue
         if status == "added" and ENTRY_RE.fullmatch(path): continue
+        cm = CONFIRM_RE.fullmatch(path)
+        if status == "added" and cm and a.author and cm.group(2) == a.author: continue
         if status == "modified" and path == "INDEX.tsv": continue
         if status == "modified" and path == "PUBLIC_REPOS.txt":
             ok, reason = append_only(a.public_repos_base, a.public_repos_head)

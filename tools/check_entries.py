@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Checker for the library entries (standard library only)."""
 import argparse
+import datetime
 import re
 import sys
 from pathlib import Path
@@ -19,7 +20,8 @@ ALLOWED = {"id", "force", "kind", "kind_why", "summary", "origin", "repro",
            "facts", "rule_scope", "owner"}
 ALWAYS = ["id", "force", "kind", "summary", "origin", "domain", "negative",
           "status", "checked_at", "added_by"]
-LIST_KEYS = {"domain", "tags", "contradicts", "facts"}
+CONFIRM_KEYS = {"entry", "verdict", "by", "checked_at", "env", "repro"}
+LIST_KEYS = {"domain", "tags", "contradicts", "facts", "env"}
 NUM_WORDS = {"one", "two", "three", "four", "five", "six", "seven", "eight",
              "nine", "ten", "hundred", "thousand", "million", "half", "twice",
              "percent"}
@@ -57,7 +59,7 @@ def parse_list(val):
     return [x.strip() for x in inner.split(",")]
 
 
-def parse_entry(text, problems, name):
+def parse_entry(text, problems, name, allowed=None):
     """Return (fields dict, key->line dict, body)."""
     lines = text.split("\n")
     fields, where = {}, {}
@@ -85,7 +87,7 @@ def parse_entry(text, problems, name):
             problems.append((name, i + 1, f"duplicate key {k}"))
             continue
         where[k] = i + 1
-        if k not in ALLOWED:
+        if k not in (ALLOWED if allowed is None else allowed):
             problems.append((name, i + 1, f"unknown key {k}"))
         if k in LIST_KEYS:
             lst = parse_list(v)
@@ -207,6 +209,41 @@ def main(argv=None):
             problems.append((name, 0, "file name must be <ID>.md with ID like E-20261026-ab12"))
     forces = {s: p[1].get("force") for s, p in parsed.items()}
 
+    confirmations = {stem: {} for stem in parsed}
+    confirm_re = re.compile(r"^([A-Za-z0-9][A-Za-z0-9-]*)-(\d{8})-[0-9a-f]{4}\.md$")
+    today = datetime.date.today()
+    confirm_dir = root / "confirms"
+    if confirm_dir.is_dir():
+        for f in sorted(confirm_dir.glob("*/*.md")):
+            name = f.relative_to(root).as_posix()
+            match = confirm_re.fullmatch(f.name)
+            entry_id = f.parent.name
+            if not match:
+                problems.append((name, 0, "file name must be <gh-user>-YYYYMMDD-xxxx.md")); continue
+            user, compact_date = match.groups()
+            text = f.read_text(encoding="utf-8")
+            privacy(text, name, problems, public_repos)
+            F, W, body = parse_entry(text, problems, name, CONFIRM_KEYS)[0:3]
+            def add(key, msg, name=name, W=W):
+                problems.append((name, W.get(key, 0), f"{key}: {msg}" if key else msg))
+            if entry_id not in parsed: add(None, f"entry {entry_id} does not exist")
+            if F.get("entry") != entry_id: add("entry", f"must equal folder name {entry_id}")
+            if F.get("verdict") not in ("confirm", "dispute"): add("verdict", "must be confirm or dispute")
+            if F.get("by") != f"gh:{user}": add("by", f"must equal gh:{user}")
+            if not DATE_RE.match(F.get("checked_at", "")): add("checked_at", "must be YYYY-MM-DD")
+            else:
+                try:
+                    checked = datetime.date.fromisoformat(F["checked_at"])
+                    if checked > today: add("checked_at", "must not be in the future")
+                except ValueError: add("checked_at", "must be a real date")
+                if F["checked_at"].replace("-", "") != compact_date: add("checked_at", "must equal the date in the file name")
+            env = F.get("env", [])
+            if not isinstance(env, list) or not 1 <= len(env) <= 3 or any(not SLUG_RE.match(x) for x in env): add("env", "needs 1-3 lowercase slugs")
+            if F.get("verdict") == "dispute" and not F.get("repro", "").strip(): add("repro", "dispute needs non-empty repro")
+            if not body.strip(): add(None, "body must not be empty")
+            if entry_id in parsed and F.get("by") and F.get("checked_at"):
+                confirmations[entry_id].setdefault(F["by"], []).append((F["checked_at"], F.get("verdict"), name))
+
     for stem, (name, F, W, body) in parsed.items():
         def add(key, msg, name=name, W=W):
             problems.append((name, W.get(key, 0), f"{key}: {msg}" if key else msg))
@@ -300,13 +337,17 @@ def main(argv=None):
     def clean(s):
         return s.replace("\t", " ")
 
-    rows = ["id\tforce\tkind\tdomain\ttags\tsummary"]
+    rows = ["id\tforce\tkind\tdomain\ttags\tsummary\tconfirms\tdisputes\tlast_checked"]
     for stem in sorted(parsed):
         F = parsed[stem][1]
+        votes = confirmations.get(stem, {})
+        current = {u: max(rs, key=lambda x: (x[0], x[2])) for u, rs in votes.items() if u != F.get("added_by")}
+        dates = [F.get("checked_at", "")] + [v[0] for v in current.values() if DATE_RE.match(v[0])]
         rows.append("\t".join([
             stem, clean(F.get("force", "")), clean(F.get("kind", "")),
             ",".join(F.get("domain", [])), ",".join(F.get("tags", [])),
-            clean(F.get("summary", ""))]))
+            clean(F.get("summary", "")), str(sum(v[1] == "confirm" for v in current.values())),
+            str(sum(v[1] == "dispute" for v in current.values())), max(dates)]))
     index = "\n".join(rows) + "\n"
     ip = root / "INDEX.tsv"
     if args.write_index:

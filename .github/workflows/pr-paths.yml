@@ -15,6 +15,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           EXPECTED_COUNT: ${{ github.event.pull_request.changed_files }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           # compare the immutable event commits, not the live PR, so a push during the run cannot mix revisions
@@ -36,4 +37,4 @@ jobs:
           if [[ "$ASSOCIATION" == "OWNER" || "$ASSOCIATION" == "MEMBER" || "$ASSOCIATION" == "COLLABORATOR" ]]; then
             args+=(--maintainer)
           fi
-          python tools/check_pr_paths.py "${args[@]}" --files-json "$RUNNER_TEMP/pr-files.json" --expected-count "$EXPECTED_COUNT" --public-repos-base "$RUNNER_TEMP/base.txt" --public-repos-head "$RUNNER_TEMP/head.txt"
+          python tools/check_pr_paths.py "${args[@]}" --author "$AUTHOR" --files-json "$RUNNER_TEMP/pr-files.json" --expected-count "$EXPECTED_COUNT" --public-repos-base "$RUNNER_TEMP/base.txt" --public-repos-head "$RUNNER_TEMP/head.txt"

@@ -258,10 +258,85 @@ class TestIndex(Base):
         root = self.make(good_set())
         self.run_check(root, "--write-index")
         rows = (root / "INDEX.tsv").read_text(encoding="utf-8").splitlines()
-        self.assertEqual(rows[0], "id\tforce\tkind\tdomain\ttags\tsummary")
+        self.assertEqual(rows[0], "id\tforce\tkind\tdomain\ttags\tsummary\tconfirms\tdisputes\tlast_checked")
         ids = [r.split("\t")[0] for r in rows[1:]]
         self.assertEqual(ids, sorted(ids))
         self.assertEqual(len(ids), 6)
+
+
+def confirm(entry_id=FACT, verdict="confirm", user="bob", date="2026-10-26",
+            env="[linux]", repro=None, by=None, body="Ran it; same result."):
+    lines = ["---", f"entry: {entry_id}", f"verdict: {verdict}",
+             f"by: {by or 'gh:' + user}", f"checked_at: {date}", f"env: {env}"]
+    if repro: lines.append(f"repro: {repro}")
+    return "\n".join(lines + ["---", body, ""])
+
+
+class TestConfirms(Base):
+    def add(self, root, files):
+        for rel, text in files.items():
+            p = root / "confirms" / rel
+            p.parent.mkdir(parents=True, exist_ok=True)
+            with open(p, "w", encoding="utf-8", newline="\n") as fh:
+                fh.write(text)
+
+    def row(self, root, entry_id=FACT):
+        code, out = self.run_check(root, "--write-index")
+        self.assertEqual(code, 0, out)
+        for r in (root / "INDEX.tsv").read_text(encoding="utf-8").splitlines():
+            if r.startswith(entry_id + "\t"):
+                return r.split("\t")[-3:]
+
+    def fails(self, files, needle):
+        root = self.make(good_set())
+        self.add(root, files)
+        code, out = self.run_check(root, "--write-index")
+        self.assertEqual(code, 1, out)
+        self.assertIn(needle, out)
+
+    def test_valid_confirm_counted(self):
+        root = self.make(good_set())
+        self.add(root, {f"{FACT}/bob-20261026-ab12.md": confirm()})
+        self.assertEqual(self.row(root), ["1", "0", "2026-10-26"])
+
+    def test_no_confirms_defaults(self):
+        self.assertEqual(self.row(self.make(good_set())), ["0", "0", "2026-10-26"])
+
+    def test_self_confirm_not_counted(self):
+        root = self.make(good_set())
+        self.add(root, {f"{FACT}/alice-20261026-ab12.md": confirm(user="alice")})
+        self.assertEqual(self.row(root)[:2], ["0", "0"])
+
+    def test_one_user_counts_once_newest_wins(self):
+        root = self.make(good_set())
+        self.add(root, {
+            f"{FACT}/bob-20261026-ab12.md": confirm(),
+            f"{FACT}/bob-20261026-cd34.md": confirm(),
+        })
+        self.assertEqual(self.row(root)[:2], ["1", "0"])
+        self.add(root, {f"{FACT}/bob-20261027-ef56.md":
+                        confirm(verdict="dispute", date="2026-10-27", repro="run x; got y")})
+        self.assertEqual(self.row(root), ["0", "1", "2026-10-27"])
+
+    def test_dispute_without_repro_rejected(self):
+        self.fails({f"{FACT}/bob-20261026-ab12.md": confirm(verdict="dispute")}, "repro")
+
+    def test_unknown_key_rejected(self):
+        self.fails({f"{FACT}/bob-20261026-ab12.md":
+                    confirm().replace("env:", "note: x\nenv:")}, "unknown key note")
+
+    def test_missing_entry_rejected(self):
+        gone = "E-20261026-ffff"
+        self.fails({f"{gone}/bob-20261026-ab12.md": confirm(entry_id=gone)}, "does not exist")
+
+    def test_folder_entry_mismatch_rejected(self):
+        self.fails({f"{FACT}/bob-20261026-ab12.md": confirm(entry_id=DATA)}, "folder name")
+
+    def test_by_file_name_mismatch_rejected(self):
+        self.fails({f"{FACT}/bob-20261026-ab12.md": confirm(by="gh:carol")}, "gh:bob")
+
+    def test_future_date_rejected(self):
+        self.fails({f"{FACT}/bob-29991231-ab12.md": confirm(date="2999-12-31")}, "future")
 
 
 if __name__ == "__main__":
