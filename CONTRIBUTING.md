@@ -5,6 +5,8 @@
 3. Run `python tools/check_entries.py --write-index` (Python 3.11+, no packages). It must print `OK`.
 4. Open a pull request. The same check runs there; a maintainer merges.
 
+Pull requests may only add files matching the exact pattern `entries/E-YYYYMMDD-xxxx.md` (plus `INDEX.tsv` and new lines in `PUBLIC_REPOS.txt`); anything else is refused by the `paths` check. Maintainers (OWNER/MEMBER/COLLABORATOR) are exempt.
+
 Good entries:
 - change what the next agent does;
 - say where they hold (`tags`) and how you know (`origin` + `repro` or `source`);

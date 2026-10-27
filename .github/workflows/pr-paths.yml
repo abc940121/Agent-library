@@ -1,0 +1,39 @@
+name: pr-paths
+on:
+  pull_request_target:
+permissions:
+  contents: read
+  pull-requests: read
+jobs:
+  paths:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read pull request paths
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          EXPECTED_COUNT: ${{ github.event.pull_request.changed_files }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          # compare the immutable event commits, not the live PR, so a push during the run cannot mix revisions
+          gh api "repos/$GH_REPO/compare/$BASE_SHA...$HEAD_SHA?per_page=100" --paginate > "$RUNNER_TEMP/compare.json"
+          jq -s '[.[].files[]?]' "$RUNNER_TEMP/compare.json" > "$RUNNER_TEMP/pr-files.json"
+          if jq -se 'add | any(.[]; .filename == "PUBLIC_REPOS.txt")' "$RUNNER_TEMP/pr-files.json" > /dev/null; then
+            # the baseline is the merge base the diff was taken from, not the default-branch checkout
+            MERGE_BASE=$(jq -sr '.[0].merge_base_commit.sha' "$RUNNER_TEMP/compare.json")
+            [[ "$MERGE_BASE" =~ ^[0-9a-f]{40}$ ]]
+            gh api "repos/$GH_REPO/contents/PUBLIC_REPOS.txt?ref=$MERGE_BASE" -H "Accept: application/vnd.github.raw" > "$RUNNER_TEMP/base.txt"
+            gh api "repos/$GH_REPO/contents/PUBLIC_REPOS.txt?ref=$HEAD_SHA" -H "Accept: application/vnd.github.raw" > "$RUNNER_TEMP/head.txt"
+          fi
+      - name: Check paths
+        env:
+          ASSOCIATION: ${{ github.event.pull_request.author_association }}
+          EXPECTED_COUNT: ${{ github.event.pull_request.changed_files }}
+        run: |
+          args=()
+          if [[ "$ASSOCIATION" == "OWNER" || "$ASSOCIATION" == "MEMBER" || "$ASSOCIATION" == "COLLABORATOR" ]]; then
+            args+=(--maintainer)
+          fi
+          python tools/check_pr_paths.py "${args[@]}" --files-json "$RUNNER_TEMP/pr-files.json" --expected-count "$EXPECTED_COUNT" --public-repos-base "$RUNNER_TEMP/base.txt" --public-repos-head "$RUNNER_TEMP/head.txt"
