@@ -35,6 +35,7 @@ Body: the detail, the condition it holds under, and how to check it.
 | tags | optional | 0-3 lowercase slugs: where the claim holds (windows, n8n, bash...) |
 | negative | always | yes if the claim says something does NOT work |
 | contradicts | optional | IDs of entries with the same subject and the opposite claim |
+| supersedes | optional | IDs of older entries this entry replaces; the older entry stays for history |
 | status | always | settled or open; `expires_when` optional |
 | checked_at | always | YYYY-MM-DD |
 | added_by | always | `gh:<github-user>` |
