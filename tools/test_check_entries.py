@@ -128,6 +128,13 @@ class TestFields(Base):
     def test_from_missing_id_rejected(self):
         self.assert_fails({FACT: entry(FACT, "fact", "concept", layer="info", **{"from": "[E-20261026-ffff]"})}, "does not exist")
 
+    def test_facts_self_rejected(self):
+        es = good_set(); es[HOWTO] = entry(HOWTO, "advice", "howto", layer="info", goal="tokens", facts=f"[{HOWTO}]")
+        self.assert_fails(es, "must not list itself")
+
+    def test_exceptions_on_raw_rejected(self):
+        self.assert_fails({FACT: entry(FACT, "fact", "concept", exceptions="Rare cases can make this broad claim fail")}, "not allowed on raw")
+
     def test_from_self_rejected(self):
         self.assert_fails({FACT: entry(FACT, "fact", "concept", layer="info", **{"from": f"[{FACT}]"})}, "must not list itself")
 

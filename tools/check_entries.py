@@ -335,8 +335,8 @@ def main(argv=None):
             add("holds_when", "law needs non-empty holds_when")
         if layer != "law" and "holds_when" in F:
             add("holds_when", "only allowed on law entries")
-        if layer == "law" and "exceptions" in F:
-            add("exceptions", "not allowed on law entries")
+        if layer != "critical" and "exceptions" in F:
+            add("exceptions", f"not allowed on {layer} entries")
         if F.get("checked_at") and not DATE_RE.match(F["checked_at"]):
             add("checked_at", "must be YYYY-MM-DD")
         if F.get("added_by") and not USER_RE.match(F["added_by"]):
@@ -404,6 +404,8 @@ def main(argv=None):
             for x in facts:
                 if x not in parsed:
                     add("facts", f"{x} does not exist")
+                elif x == stem:
+                    add("facts", "must not list itself")
                 elif forces.get(x) != "fact":
                     add("facts", f"{x} is not a fact entry")
         else:

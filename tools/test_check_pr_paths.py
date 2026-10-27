@@ -53,6 +53,12 @@ class TestPaths(unittest.TestCase):
         self.assertEqual(self.run_check([dict(own[0], status="modified")], author="bob").returncode, 1)
         self.assertEqual(self.run_check([{"status":"added","filename":"confirms/E-20261027-ab12/bob-x.md"}], author="bob").returncode, 1)
 
+    def test_confirm_with_its_entry_refused(self):
+        records = [{"status":"added","filename":"entries/E-20261027-ab12.md"},
+                   {"status":"added","filename":"confirms/E-20261027-ab12/bob-20261027-cd34.md"}]
+        r = self.run_check(records, author="bob")
+        self.assertEqual(r.returncode, 1); self.assertIn("later PR", r.stdout)
+
     def test_maintainer(self):
         with tempfile.TemporaryDirectory() as td:
             f = Path(td)/"f"; f.write_text("[]", encoding="utf-8")

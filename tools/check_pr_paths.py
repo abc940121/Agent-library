@@ -59,6 +59,9 @@ def main(argv=None):
         print(f"REFUSED input 'input': record count {len(records)} != expected {a.expected_count}"); return 1
     if len(records) >= 3000: print("REFUSED input 'input': API record cap reached"); return 1
     refused = []
+    # a confirm in the same PR as its entry would let an outsider confirm their own claim
+    new_entries = {r.get("filename", "")[len("entries/"):-len(".md")] for r in records
+                   if isinstance(r, dict) and r.get("status") == "added" and ENTRY_RE.fullmatch(r.get("filename", ""))}
     for record in records:
         if not isinstance(record, dict): refused.append(refusal("unknown", "", "malformed API record")); continue
         status, path, previous = record.get("status", "unknown"), record.get("filename", ""), record.get("previous_filename")
@@ -67,6 +70,8 @@ def main(argv=None):
         if previous is not None and unsafe(previous): refused.append(refusal(status, previous, "previous_filename is not safe")); continue
         if status == "added" and ENTRY_RE.fullmatch(path): continue
         cm = CONFIRM_RE.fullmatch(path)
+        if status == "added" and cm and cm.group(1) in new_entries:
+            refused.append(refusal(status, path, "confirm an entry in a later PR, not the one that adds it")); continue
         if status == "added" and cm and a.author and cm.group(2) == a.author: continue
         if status == "modified" and path == "INDEX.tsv": continue
         if status == "modified" and path == "PUBLIC_REPOS.txt":
