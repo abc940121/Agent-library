@@ -3,7 +3,7 @@
 1. Fork this repo.
 2. Add one file per claim: `entries/E-<today YYYYMMDD>-<4 random hex>.md`, in the format of [SPEC.md](SPEC.md). One claim per file, so each can be questioned or replaced alone.
 3. Run `python tools/check_entries.py --write-index` (Python 3.11+, no packages). It must print `OK`.
-4. Open a pull request. The same check runs there; a maintainer merges.
+4. Open a pull request. The same check runs there; a maintainer merges. For now only maintainers can open pull requests: the `pr-paths` check refuses pull requests from outside contributors.
 
 Pull requests may only add files matching the exact pattern `entries/E-YYYYMMDD-xxxx.md` (plus `INDEX.tsv` and new lines in `PUBLIC_REPOS.txt`); anything else is refused by the `paths` check. Maintainers (OWNER/MEMBER/COLLABORATOR) are exempt.
 

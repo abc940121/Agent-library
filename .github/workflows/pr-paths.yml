@@ -36,5 +36,9 @@ jobs:
           args=()
           if [[ "$ASSOCIATION" == "OWNER" || "$ASSOCIATION" == "MEMBER" || "$ASSOCIATION" == "COLLABORATOR" ]]; then
             args+=(--maintainer)
+          else
+            # outside pull requests are closed for now; the path rules below stay for when they open
+            echo "REFUSED: outside pull requests are not accepted yet ($ASSOCIATION); a maintainer must open it"
+            exit 1
           fi
           python tools/check_pr_paths.py "${args[@]}" --author "$AUTHOR" --files-json "$RUNNER_TEMP/pr-files.json" --expected-count "$EXPECTED_COUNT" --public-repos-base "$RUNNER_TEMP/base.txt" --public-repos-head "$RUNNER_TEMP/head.txt"
