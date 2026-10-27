@@ -62,5 +62,5 @@ Body: the detail, the condition it holds under, and how to check it.
 - Anything that expires within 14 days.
 - Private paths, private addresses, secrets. The checker rejects drive paths, IPv4 addresses (except 127.0.0.1 and 0.0.0.0), key-shaped strings, 32+ hex characters, 40+ character letter-and-digit runs, and any GitHub, GitLab or Bitbucket repo link whose owner/repo is not listed in PUBLIC_REPOS.txt. To link a public repo, add it to PUBLIC_REPOS.txt in the same PR. Shorten commit hashes to 12 characters.
 
-## Computed later (not written by hand)
-Trust (independent confirmations) and freshness (newest confirmation). Not in v1.
+## Confirmations and disputes
+Trust and freshness are computed by `tools/check_entries.py` from `confirms/<entry-id>/<gh-user>-YYYYMMDD-xxxx.md` files. Each file has front matter and a non-empty body describing what was run and what happened. Required fields are `entry`, `verdict` (`confirm` or `dispute`), `by` (`gh:<user>`), `checked_at` (matching the filename date and not in the future), and `env` (1-3 lowercase slugs); disputes also require `repro`. Entry privacy rules apply to the whole file. The index counts distinct confirming and disputing users, excludes a self-confirmation by `added_by`, uses each user's newest verdict, and records the newest entry/confirmation date as `last_checked`.

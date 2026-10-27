@@ -45,6 +45,14 @@ class TestPaths(unittest.TestCase):
             self.assertEqual(self.run_check([{"status":"modified","filename":"PUBLIC_REPOS.txt"}], public_repos_base=base, public_repos_head=head).returncode, 0)
             self.assertEqual(self.run_check([{"status":"modified","filename":"PUBLIC_REPOS.txt"}], public_repos_base=base).returncode, 1)
 
+    def test_confirm_paths(self):
+        own = [{"status":"added","filename":"confirms/E-20261027-ab12/bob-20261027-cd34.md"}]
+        self.assertEqual(self.run_check(own, author="bob").returncode, 0)
+        self.assertEqual(self.run_check(own, author="mallory").returncode, 1)
+        self.assertEqual(self.run_check(own).returncode, 1)
+        self.assertEqual(self.run_check([dict(own[0], status="modified")], author="bob").returncode, 1)
+        self.assertEqual(self.run_check([{"status":"added","filename":"confirms/E-20261027-ab12/bob-x.md"}], author="bob").returncode, 1)
+
     def test_maintainer(self):
         with tempfile.TemporaryDirectory() as td:
             f = Path(td)/"f"; f.write_text("[]", encoding="utf-8")
