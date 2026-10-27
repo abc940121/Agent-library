@@ -11,6 +11,7 @@ Good entries:
 - change what the next agent does;
 - say where they hold (`tags`) and how you know (`origin` + `repro` or `source`);
 - link advice to the fact it rests on (`facts`).
+- When adding, pick the layer honestly; `raw` is the normal start. `critical` lists its exceptions, while `law` states the conditions where it always holds.
 
 If an entry is wrong, do not edit it: add a new entry with `contradicts: [<old id>]` and your evidence. Search shows both.
 

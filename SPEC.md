@@ -1,4 +1,4 @@
-# Entry spec (v1)
+# Entry spec (v2)
 
 `tools/check_entries.py` enforces everything on this page. If this page and the checker disagree, open an issue.
 
@@ -29,6 +29,7 @@ Body: the detail, the condition it holds under, and how to check it.
 | id | always | equals the file name |
 | force | always | fact, advice, rule |
 | kind | always | fact: concept or data. advice: howto, fix or choice. rule: policy. Or `other` with `kind_why`. |
+| layer | always | raw, info, critical, or law; how much evidence stands behind the claim |
 | summary | always | one line, 20-200 characters, in the kind's template |
 | origin | always | measured (needs `repro`), quoted (needs `source`, an https link), guess |
 | domain | always | 1-2 lowercase slugs |
@@ -41,6 +42,9 @@ Body: the detail, the condition it holds under, and how to check it.
 | added_by | always | `gh:<github-user>` |
 | goal | advice | one of: latency, cost, accuracy, failure-rate, tokens, time, memory, reliability, security, maintainability. A fix may use `symptom`. |
 | facts | advice | IDs of fact entries the advice rests on; at least one for howto and choice |
+| from | optional | Evidence IDs; combined with `facts` for the layer evidence set |
+| exceptions | critical only | One-line known cases where the claim fails, 10-300 characters |
+| holds_when | law | One-line conditions under which the claim always holds, 10-300 characters |
 | rule_scope, owner | rule | the scope must be in `SCOPES.tsv` and the owner listed for it |
 
 ## Summary templates
@@ -58,10 +62,19 @@ Body: the detail, the condition it holds under, and how to check it.
 - Only advice and rules may be imperative.
 - "X can improve Y" is two entries: a fact for the claim, and a howto that links to it.
 
+## Layers
+
+- `raw` is one observation, measurement, or source statement; it needs no evidence list.
+- `info` is a conclusion drawn from other entries; it needs at least one evidence ID from `from` or `facts`.
+- `critical` is an underlying rule explaining many cases; it needs at least two evidence IDs whose entries are `info`, and it lists its known exceptions. It must have at least two distinct other-user confirms and no disputes before `settled`; otherwise it must be `open`.
+- `law` is a claim that always holds inside stated conditions; it needs at least two evidence IDs whose entries are `critical` or `law`, and states those conditions in `holds_when`. It cannot list exceptions. `settled` requires at least three distinct other-user confirms across at least two environment slugs and no disputes; otherwise it must be `open`.
+
+Evidence IDs are the union of `from` and `facts`; every ID must exist and must not be the entry itself. A `raw` entry with `origin: measured` needs at least one confirm from another user and no disputes before `settled`; otherwise it must be `open`.
+
 ## What is not an entry
 - To-dos and current state ("the quota is used up now"). They change; put them in an issue.
 - Anything that expires within 14 days.
 - Private paths, private addresses, secrets. The checker rejects drive paths, IPv4 addresses (except 127.0.0.1 and 0.0.0.0), key-shaped strings, 32+ hex characters, 40+ character letter-and-digit runs, and any GitHub, GitLab or Bitbucket repo link whose owner/repo is not listed in PUBLIC_REPOS.txt. To link a public repo, add it to PUBLIC_REPOS.txt in the same PR. Shorten commit hashes to 12 characters.
 
 ## Confirmations and disputes
-Trust and freshness are computed by `tools/check_entries.py` from `confirms/<entry-id>/<gh-user>-YYYYMMDD-xxxx.md` files. Each file has front matter and a non-empty body describing what was run and what happened. Required fields are `entry`, `verdict` (`confirm` or `dispute`), `by` (`gh:<user>`), `checked_at` (matching the filename date and not in the future), and `env` (1-3 lowercase slugs); disputes also require `repro`. Entry privacy rules apply to the whole file. The index counts distinct confirming and disputing users, excludes a self-confirmation by `added_by`, uses each user's newest verdict, and records the newest entry/confirmation date as `last_checked`.
+Trust and freshness are computed by `tools/check_entries.py` from `confirms/<entry-id>/<gh-user>-YYYYMMDD-xxxx.md` files. Each file has front matter and a non-empty body describing what was run and what happened. Required fields are `entry`, `verdict` (`confirm` or `dispute`), `by` (`gh:<user>`), `checked_at` (matching the filename date and not in the future), and `env` (1-3 lowercase slugs); disputes also require `repro`. Entry privacy rules apply to the whole file. The index counts distinct confirming and disputing users, excludes a self-confirmation by `added_by`, uses each user's newest verdict, and records the newest entry/confirmation date as `last_checked`. An outsider PR may not add a confirm for an entry that the same PR adds.

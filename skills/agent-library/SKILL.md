@@ -1,4 +1,5 @@
 ---
+`layer` says how much evidence stands behind a claim (raw < info < critical < law); critical lists its exceptions while law states the conditions where it always holds. A `raw` + `open` entry is a single observation.
 name: agent-library
 description: Search the public Agent-library for checked facts, advice and rules before guessing. Use when a tool, shell, model or agent-team problem may already have a known answer, or before writing down a lesson others could reuse.
 ---

@@ -16,14 +16,14 @@ GOALS = {"latency", "cost", "accuracy", "failure-rate", "tokens", "time",
          "memory", "reliability", "security", "maintainability"}
 KINDS = {"fact": {"concept", "data"}, "advice": {"howto", "fix", "choice"},
          "rule": {"policy"}}
-ALLOWED = {"id", "force", "kind", "kind_why", "summary", "origin", "repro",
+ALLOWED = {"id", "force", "kind", "layer", "kind_why", "summary", "origin", "repro",
            "source", "domain", "tags", "negative", "contradicts", "supersedes", "status",
            "expires_when", "checked_at", "added_by", "goal",
-           "facts", "rule_scope", "owner"}
-ALWAYS = ["id", "force", "kind", "summary", "origin", "domain", "negative",
+           "facts", "from", "exceptions", "holds_when", "rule_scope", "owner"}
+ALWAYS = ["id", "force", "kind", "layer", "summary", "origin", "domain", "negative",
           "status", "checked_at", "added_by"]
 CONFIRM_KEYS = {"entry", "verdict", "by", "checked_at", "env", "repro"}
-LIST_KEYS = {"domain", "tags", "contradicts", "supersedes", "facts", "env"}
+LIST_KEYS = {"domain", "tags", "contradicts", "supersedes", "facts", "from", "env"}
 NUM_WORDS = {"one", "two", "three", "four", "five", "six", "seven", "eight",
              "nine", "ten", "hundred", "thousand", "million", "half", "twice",
              "percent"}
@@ -271,7 +271,8 @@ def main(argv=None):
             if F.get("verdict") == "dispute" and not F.get("repro", "").strip(): add("repro", "dispute needs non-empty repro")
             if not body.strip(): add(None, "body must not be empty")
             if entry_id in parsed and F.get("by") and F.get("checked_at"):
-                confirmations[entry_id].setdefault(F["by"], []).append((F["checked_at"], F.get("verdict"), name))
+                confirmations[entry_id].setdefault(F["by"], []).append(
+                    (F["checked_at"], F.get("verdict"), name, F.get("env", [])))
 
     for stem, (name, F, W, body) in parsed.items():
         def add(key, msg, name=name, W=W):
@@ -322,6 +323,20 @@ def main(argv=None):
             add("negative", "must be yes or no")
         if F.get("status") and F["status"] not in ("settled", "open"):
             add("status", "must be settled or open")
+        layer = F.get("layer")
+        if layer and layer not in ("raw", "info", "critical", "law"):
+            add("layer", "must be raw, info, critical or law")
+        for key in ("exceptions", "holds_when"):
+            if key in F and not 10 <= len(F[key]) <= 300:
+                add(key, "must be one line of 10-300 characters")
+        if layer == "critical" and not F.get("exceptions", "").strip():
+            add("exceptions", "critical needs non-empty exceptions")
+        if layer == "law" and not F.get("holds_when", "").strip():
+            add("holds_when", "law needs non-empty holds_when")
+        if layer != "law" and "holds_when" in F:
+            add("holds_when", "only allowed on law entries")
+        if layer != "critical" and "exceptions" in F:
+            add("exceptions", f"not allowed on {layer} entries")
         if F.get("checked_at") and not DATE_RE.match(F["checked_at"]):
             add("checked_at", "must be YYYY-MM-DD")
         if F.get("added_by") and not USER_RE.match(F["added_by"]):
@@ -334,6 +349,48 @@ def main(argv=None):
                 add("supersedes", f"{x} does not exist")
             elif x == stem:
                 add("supersedes", "must not list itself")
+        evidence = set(F.get("from", [])) | set(F.get("facts", []))
+        for x in F.get("from", []):
+            if x not in parsed:
+                add("from", f"{x} does not exist")
+            elif x == stem:
+                add("from", "must not list itself")
+        if layer == "info" and not evidence:
+            add("layer", "info needs at least 1 evidence id")
+        if layer == "critical":
+            info_evidence = [x for x in evidence if x in parsed and parsed[x][1].get("layer") == "info"]
+            if len(evidence) < 2 or len(info_evidence) < 2:
+                add("layer", "critical needs at least 2 evidence ids whose entries are layer: info")
+            confirms = confirmations.get(stem, {})
+            current = {u: max(rs, key=lambda x: (x[0], x[2])) for u, rs in confirms.items()
+                       if u != F.get("added_by")}
+            if F.get("status") == "settled" and sum(v[1] == "confirm" for v in current.values()) < 2:
+                add("status", "a critical entry needs 2 confirms from other users before settled")
+            if F.get("status") == "settled" and any(v[1] == "dispute" for v in current.values()):
+                add("status", "a critical entry with a dispute must be open; fix it or add the case to exceptions")
+        if layer == "law":
+            critical_evidence = [x for x in evidence if x in parsed and
+                                 parsed[x][1].get("layer") in ("critical", "law")]
+            if len(evidence) < 2 or len(critical_evidence) < 2:
+                add("layer", "law needs at least 2 evidence ids whose entries are layer: critical or law")
+            confirms = confirmations.get(stem, {})
+            current = {u: max(rs, key=lambda x: (x[0], x[2])) for u, rs in confirms.items()
+                       if u != F.get("added_by")}
+            confirmers = [v for v in current.values() if v[1] == "confirm"]
+            envs = {env for v in confirmers for env in v[3]}
+            disputes = sum(v[1] == "dispute" for v in current.values())
+            if F.get("status") == "settled" and (len(confirmers) < 3 or len(envs) < 2):
+                add("status", "a law entry needs 3 confirms from other users across 2 envs before settled")
+            if F.get("status") == "settled" and disputes:
+                add("status", "a law with a dispute must be open; fix it or move it back to critical")
+        if layer == "raw" and origin == "measured" and F.get("status") == "settled":
+            confirms = confirmations.get(stem, {})
+            current = {u: max(rs, key=lambda x: (x[0], x[2])) for u, rs in confirms.items()
+                       if u != F.get("added_by")}
+            if sum(v[1] == "confirm" for v in current.values()) < 1:
+                add("status", "a raw measured entry needs 1 confirm from another user before settled")
+            if any(v[1] == "dispute" for v in current.values()):
+                add("status", "a raw measured entry with a dispute must be open")
         if force == "advice":
             goal = F.get("goal", "")
             # a fix's goal is the symptom gone, so it may say goal: symptom
@@ -347,6 +404,8 @@ def main(argv=None):
             for x in facts:
                 if x not in parsed:
                     add("facts", f"{x} does not exist")
+                elif x == stem:
+                    add("facts", "must not list itself")
                 elif forces.get(x) != "fact":
                     add("facts", f"{x} is not a fact entry")
         else:
@@ -381,14 +440,14 @@ def main(argv=None):
     def clean(s):
         return s.replace("\t", " ")
 
-    rows = ["id\tforce\tkind\tdomain\ttags\tsummary\tconfirms\tdisputes\tlast_checked"]
+    rows = ["id\tforce\tkind\tlayer\tdomain\ttags\tsummary\tconfirms\tdisputes\tlast_checked"]
     for stem in sorted(parsed):
         F = parsed[stem][1]
         votes = confirmations.get(stem, {})
         current = {u: max(rs, key=lambda x: (x[0], x[2])) for u, rs in votes.items() if u != F.get("added_by")}
         dates = [F.get("checked_at", "")] + [v[0] for v in current.values() if DATE_RE.match(v[0])]
         rows.append("\t".join([
-            stem, clean(F.get("force", "")), clean(F.get("kind", "")),
+            stem, clean(F.get("force", "")), clean(F.get("kind", "")), clean(F.get("layer", "")),
             ",".join(F.get("domain", [])), ",".join(F.get("tags", [])),
             clean(F.get("summary", "")), str(sum(v[1] == "confirm" for v in current.values())),
             str(sum(v[1] == "dispute" for v in current.values())), max(dates)]))

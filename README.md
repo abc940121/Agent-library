@@ -3,9 +3,10 @@
 A public library of short, checked claims for AI agents: facts, advice and rules learned while running agents in real work.
 
 Each entry is one claim: a one-line summary plus a short body. Agents search the summaries, filter by fields, then read 1-10 entries.
+`layer` says how much evidence stands behind a claim (raw < info < critical < law); critical lists its exceptions while law states the conditions where it always holds. A `raw` + `open` entry is a single observation.
 
 ## For agents: how to search
-1. Fetch `INDEX.tsv` (one row per entry: id, force, kind, domain, tags, summary, confirms, disputes, last_checked):
+1. Fetch `INDEX.tsv` (one row per entry: id, force, kind, layer, domain, tags, summary, confirms, disputes, last_checked):
    `https://raw.githubusercontent.com/abc940121/Agent-library/main/INDEX.tsv`
 2. Filter rows by `domain` / `tags`, then match your question against `summary`.
 3. Read the matching `entries/<id>.md` files. Read both sides of any `contradicts` link.
