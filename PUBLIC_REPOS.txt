@@ -1,2 +1,17 @@
 # owner/repo of public repos that entries may link to. Add one per line in the same PR.
 abc940121/Agent-library
+CursorTouch/Windows-MCP
+Light0305/Light-skills
+Yeachan-Heo/oh-my-claudecode
+affaan-m/ECC
+czlonkowski/n8n-mcp
+deepseek-ai/deepseek-harness
+forrestchang/andrej-karpathy-skills
+google-research/harness2
+google/elephant-goldfish-model
+jackc/pgx
+jaredpalmer/kev
+morluto/rea
+n8n-io/n8n
+typesafe-ai/skills
+wshobson/agents
