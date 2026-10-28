@@ -32,11 +32,19 @@ E-20261027-d7e9	advice	howto	info	testing		To validate a test result, confirm th
 E-20261027-e5f6	fact	concept	raw	shell,python	bash	A shell heredoc can transform backslash escapes before Python receives the text.	0	0	2026-10-25
 E-20261027-e8f0	advice	howto	info	llm		To keep model evaluations comparable, capture rendered prompts and defaults for every backend.	0	0	2026-10-25
 E-20261027-f3a4	fact	concept	raw	n8n		In n8n regular mode, an execution timeout cancels the execution instead of triggering the Error Workflow.	0	0	2026-10-24
+E-20261028-01bb	fact	concept	raw	management	organization	Kurt MacAlpine (Corient) says he used a professional services partnership structure to encourage collaboration in wealth management.	0	0	2026-10-28
 E-20261028-02cf	fact	concept	raw	llm,generation		AgentWrite can generate long documents by planning subtasks and writing them sequentially.	0	0	2026-10-28
+E-20261028-02f0	fact	concept	raw	management	delegation	Todd Graves (Raising Cane's) says he stays involved until capable people can perform the work better than he can.	0	0	2026-10-28
 E-20261028-05d4	fact	data	raw	workflows,repair		Pumbaa repairs about 29% of evaluated GPT-4o workflow defects with static feedback versus about 5% without it.	0	0	2026-10-28
+E-20261028-064d	fact	concept	raw	strategy		Sun Tzu, Maneuvering (軍爭): gaining positional advantage requires turning indirect routes and difficulties into advantage.	0	0	2026-10-28
 E-20261028-06d5	fact	data	raw	workflows,evaluation		MCPGen reports workflow reconstruction up to 88.5%, while end-to-end executability stays at or below 57%.	0	0	2026-10-28
+E-20261028-0707	fact	concept	raw	business	marketing	Jimmy Iovine (Interscope / Beats) says he treats marketing as empathy for the audience and an understanding of what they feel.	0	0	2026-10-28
+E-20261028-0926	fact	concept	raw	business	process	Eric Glyman (Ramp) says he questions and simplifies finance processes before automating them to reduce customer effort.	0	0	2026-10-28
 E-20261028-0998	fact	concept	raw	reverse-engineering,mcp		REA can expose reverse-engineering capabilities to an external agent through MCP.	0	0	2026-10-28
+E-20261028-0ab9	fact	concept	raw	business	profitability	Adam Foroughi (AppLovin) says he pursued profitability from the start because he wanted to limit his own capital commitment.	0	0	2026-10-28
+E-20261028-0b26	fact	concept	raw	management	organization	Alexandr Wang (Meta) says he makes researchers direct reports to reduce bureaucracy and let proven talent do its best work.	0	0	2026-10-28
 E-20261028-0c3d	fact	concept	raw	agents,evaluation		How I Work with Agents proposes controlled experiments to check whether agent instructions and skills affect behavior.	0	0	2026-10-28
+E-20261028-0dc0	fact	concept	raw	business	talent	Patrick O'Shaughnessy (Colossus) says he makes discovering and supporting overlooked talent a guiding principle for how he spends his time.	0	0	2026-10-28
 E-20261028-0f47	fact	concept	raw	agents,context		ECC can load coding-agent skills on demand instead of placing the entire skill collection in context.	0	0	2026-10-28
 E-20261028-0f88	fact	concept	raw	agents,memory		Raw experience traces can outperform distilled procedural skills in SkillEvolBench.	0	0	2026-10-28
 E-20261028-1152	fact	data	raw	llm,inference		Repeated sampling raises DeepSeek-Coder-V2 SWE-bench Lite coverage from 15.9% at 1 sample to 56% at 250 samples.	0	0	2026-10-28
@@ -44,72 +52,171 @@ E-20261028-1263	fact	concept	raw	llm,structured-output		Format-requesting prompt
 E-20261028-12b6	fact	concept	raw	agents,documentation		Elephant-Goldfish Model can compare checked-in design documents against current code with a drift report.	0	0	2026-10-28
 E-20261028-12e7	fact	concept	raw	agents,communication		Value of Information can frame clarification as expected decision benefit weighed against user burden.	0	0	2026-10-28
 E-20261028-12fe	fact	data	raw	agents,memory		Actual-use precision falls from 29.6% to 3.3% as the studied skill pool grows from 5 to 100.	0	0	2026-10-28
+E-20261028-130a	fact	concept	raw	business	simplicity	Eric Jorgenson (Scribe Media) says removing product parts reduces both cost and reliability risks from assembly and interfaces.	0	0	2026-10-28
+E-20261028-16c2	fact	concept	raw	management	learning	Daniel Ek (Spotify) says he shadows other CEOs and interviews their executives to understand operating practices in context.	0	0	2026-10-28
 E-20261028-1921	fact	concept	raw	llm,communication		The cited Karpathy post proposes ASD-STE100-style controlled English for clearer LLM explanations.	0	0	2026-10-28
 E-20261028-1a49	fact	concept	raw	workflows,generation		Chat2Workflow can generate simplified JSON that a program converts into executable workflow YAML.	0	0	2026-10-28
+E-20261028-1b48	fact	concept	raw	business	product	Marc Andreessen (a16z / Netscape) says he built a graphical browser to turn the nascent text based web into usable mainstream software.	0	0	2026-10-28
+E-20261028-1c7e	fact	concept	raw	strategy		Sun Tzu, Terrain (地形): victory depends on understanding terrain together with enemy and friendly forces.	0	0	2026-10-28
+E-20261028-1c91	fact	concept	raw	strategy		Sun Tzu, Strategic Power (兵勢): effective command creates momentum through the arrangement and coordinated use of forces.	0	0	2026-10-28
+E-20261028-1ec1	fact	concept	raw	business	focus	Scott Wu (Cognition) says he concentrates Cognition on software because specialization shapes both its products and how it operates.	0	0	2026-10-28
 E-20261028-20c5	fact	concept	raw	agents,memory		Abstract memory insights can transfer across coding domains while concrete traces can cause negative transfer.	0	0	2026-10-28
 E-20261028-20dd	fact	data	raw	reasoning,evaluation		ReasonBENCH reports that its leading strategy wins only 77% of runs against its nearest competitor.	0	0	2026-10-28
 E-20261028-232c	fact	concept	raw	agents,design		Elephant-Goldfish Model can review a design with fresh agents that receive the document and referenced code.	0	0	2026-10-28
+E-20261028-2722	fact	concept	raw	strategy		Sun Tzu, Attack by Stratagem (謀攻): subduing an enemy without fighting is the highest form of victory.	0	0	2026-10-28
 E-20261028-2751	fact	concept	raw	llm,generation		Skeleton-of-Thought can draft an answer outline before expanding its points in parallel.	0	0	2026-10-28
 E-20261028-2a14	fact	concept	raw	llm,evaluation		Active question selection does not always outperform uniform sampling in sequential LLM evaluation.	0	0	2026-10-28
+E-20261028-2b11	fact	concept	raw	business	research	Jeremy Stern (Colossus) says he studies a subject and their relationships before deciding what a profile is really about.	0	0	2026-10-28
 E-20261028-2bdf	fact	data	raw	agents,evaluation		The coordination study reports mean scores of 83.3 for QA-first and round-robin versus 81.9 for the pipeline across 3 models.	0	0	2026-10-28
+E-20261028-2bf4	fact	concept	raw	business	learning	Michael Ovitz (CAA) says he arrived early as a trainee to learn faster than peers and distinguish himself without family connections.	0	0	2026-10-28
 E-20261028-2e6f	fact	data	raw	llm,repair		Blind resampling and factual feedback each unlock 26 of 290 programs in the reported self-repair experiment.	0	0	2026-10-28
+E-20261028-300f	fact	concept	raw	management	hiring	Torsten Reil (Helsing) says he builds a strong recruiting pipeline to make replacing people who are poor fits easier.	0	0	2026-10-28
+E-20261028-3027	fact	concept	raw	management	customers	Mati Staniszewski (ElevenLabs) says he places deployment engineers in product so customer integration lessons improve the shared product.	0	0	2026-10-28
 E-20261028-3095	fact	concept	raw	workflows,documentation	n8n	The n8n-io GitHub organization publishes official n8n code and documentation.	0	0	2026-10-28
 E-20261028-3099	fact	concept	raw	llm,generation		Long-context comprehension performance does not ensure reliable instruction following during long-form generation.	0	0	2026-10-28
+E-20261028-3197	fact	concept	raw	business	customers	Eric Glyman (Ramp) says he built Ramp around reducing customers' spending because owners wanted cash savings rather than reward incentives.	0	0	2026-10-28
+E-20261028-3251	fact	concept	raw	management	hiring	Jonathan Ross (Groq) says he hires autonomous people who can execute independently because he is comfortable delegating control.	0	0	2026-10-28
 E-20261028-363c	fact	concept	raw	agents,optimization		Harness2 can retain successful harness edits and carry improvement experience into subsequent tasks.	0	0	2026-10-28
 E-20261028-37a8	fact	concept	raw	agents,security		Downloaded agent instruction files can redirect a coding agent when it later works in their folder.	0	0	2026-10-28
+E-20261028-3e0b	fact	concept	raw	business	product	Gustav Söderström (Spotify) says he uses taste profiles and agents to let users set preferences before tempting content captures attention.	0	0	2026-10-28
 E-20261028-3e9a	fact	concept	raw	agents,memory		Agent Workflow Memory can turn successful trajectories into reusable workflows with placeholders.	0	0	2026-10-28
 E-20261028-3eb7	fact	data	raw	agents,inference		RRSI reports 30% fewer policy tokens than unregularized harness evolution.	0	0	2026-10-28
+E-20261028-40f0	fact	concept	raw	business	research	Jeremy Stern (Colossus) says he starts with a topic of interest and finds a person whose life can illuminate it.	0	0	2026-10-28
+E-20261028-450a	fact	concept	raw	business	product	David Baszucki (Roblox) says he returned to playful experimentation after observing children build with educational physics software.	0	0	2026-10-28
+E-20261028-4637	fact	concept	raw	management	organization	Luca Ferrari (Bending Spoons) says he removed formal titles because managing their external signaling value was unnecessary company work.	0	0	2026-10-28
 E-20261028-47c6	fact	data	raw	agents,evaluation		MAST identifies 14 multi-agent failure modes grouped into 3 categories.	0	0	2026-10-28
+E-20261028-47d3	fact	concept	raw	business	investing	Doug Leone (Sequoia Capital) says he favors retaining exceptional investments when their markets can support continued compounding.	0	0	2026-10-28
+E-20261028-4845	fact	concept	raw	business	creativity	Rick Rubin (American Recordings) says creative work requires showing up because inspiration needs an opportunity to arrive.	0	0	2026-10-28
+E-20261028-488d	fact	concept	raw	business	business-model	Marc Andreessen (a16z / Netscape) says he designed a16z as a scaled platform because he expected venture capital's middle tier to lose ground.	0	0	2026-10-28
+E-20261028-49d3	fact	concept	raw	business	acquisitions	John Mackey (Whole Foods Market) says he used regional acquisitions to obtain local teams and support platforms for expansion.	0	0	2026-10-28
 E-20261028-4afc	fact	concept	raw	llm,routing		Conformal Cascade can bound the joint probability of accepting an answer and being wrong.	0	0	2026-10-28
+E-20261028-4b99	fact	concept	raw	management	hiring	Jonathan Ross (Groq) says he screens candidates for damaging traits because a problematic hire brings those traits into the team.	0	0	2026-10-28
+E-20261028-4cca	fact	concept	raw	strategy		Sun Tzu, Laying Plans (始計): comparative preparation before battle reveals the prospects of victory.	0	0	2026-10-28
 E-20261028-4e4f	fact	data	raw	llm,evaluation		Paired resolution diagnostics find 11 of 40 Open LLM Leaderboard comparisons unresolved at alpha 0.05 and power 0.8.	0	0	2026-10-28
 E-20261028-4f91	fact	data	raw	workflows,validation		The Timon/Pumbaa study finds at least 1 defect in 89.23% of its generated DSL workflows.	0	0	2026-10-28
+E-20261028-4fc4	fact	concept	raw	strategy		Sun Tzu, Military Dispositions (軍形): securing oneself against defeat comes before exploiting the enemy's vulnerability.	0	0	2026-10-28
+E-20261028-5013	fact	concept	raw	management	decisions	Tobi Lütke (Shopify) says he updates his opinions when better information arrives so decisions reflect what he now knows.	0	0	2026-10-28
+E-20261028-5155	fact	concept	raw	strategy		Sun Tzu, The Army on the March (行軍): terrain and observable enemy signs guide safe encampment and the assessment of opposing forces.	0	0	2026-10-28
 E-20261028-51b4	fact	concept	raw	agents,reasoning		Multi-agent debate does not consistently outperform chain-of-thought or self-consistency baselines.	0	0	2026-10-28
 E-20261028-54e1	fact	concept	raw	llm,tool-use		Joint JSON Schema constraints and tool calling can suppress tool invocation in open-weight models.	0	0	2026-10-28
+E-20261028-54f2	fact	concept	raw	management	delegation	Daniel Ek (Spotify) says he stopped running product meetings when Gustav proved better at leading product decisions.	0	0	2026-10-28
+E-20261028-5b34	fact	concept	raw	strategy		Sun Tzu, The Use of Spies (用間): successful operations depend on foreknowledge obtained from people who know the enemy's situation.	0	0	2026-10-28
+E-20261028-5c1b	fact	concept	raw	management	design	Evan Spiegel (Snap) says he sees art school designers as a good fit because their training suits Snap's rapid iteration culture.	0	0	2026-10-28
 E-20261028-5c8c	fact	data	raw	llm,generation		Qwen2-7B GSM8K accuracy falls by about 18 percentage points when answers are combined into a long response.	0	0	2026-10-28
+E-20261028-5d3d	fact	concept	raw	business	marketing	Peter Rahal (RXBAR / David) says he used frozen cod as a communication device to draw attention to protein relative to calories.	0	0	2026-10-28
 E-20261028-5f12	fact	concept	raw	agents,tool-use		TypeSafe Agent Skills is a public skill collection for requesting typed decisions from its decision API.	0	0	2026-10-28
+E-20261028-5f40	fact	concept	raw	strategy		Sun Tzu, Variation in Tactics (九變): commanders gain advantage by adapting actions to circumstances rather than applying fixed instructions.	0	0	2026-10-28
+E-20261028-6158	fact	concept	raw	management	culture	Ed Catmull (Pixar) says he addresses individual lapses directly instead of adding a company rule for every mistake.	0	0	2026-10-28
+E-20261028-6283	fact	concept	raw	management	hiring	Alexander Taubman (Long Lake) says he requires each incremental hire to raise the team's average capability.	0	0	2026-10-28
+E-20261028-6363	fact	concept	raw	business	pricing	Ronnie Fieg (Kith) says he sets product prices with the aim of giving customers more value than they pay for.	0	0	2026-10-28
+E-20261028-660f	fact	concept	raw	management	decisions	Ivanka Trump (Trump Organization) says she retains responsibility for major decisions while seeking knowledgeable people's perspectives.	0	0	2026-10-28
 E-20261028-6936	fact	data	raw	literature		The Art of War is divided into 13 chapters in the Chinese Text Project edition.	0	0	2026-10-28
 E-20261028-6adf	fact	concept	raw	workflows,reliability	n8n	Explicit reliability mechanisms are relatively uncommon in the public n8n workflows studied.	0	0	2026-10-28
+E-20261028-6d75	fact	concept	raw	business	production	Michael Ovitz (CAA) says he treated dinosaurs as Jurassic Park's stars to reduce the need for an expensive human star.	0	0	2026-10-28
+E-20261028-70c6	fact	concept	raw	management	leadership	Strauss Zelnick (TakeTwo Interactive) says he handles difficult creative personalities by caring about them as people.	0	0	2026-10-28
+E-20261028-7349	fact	concept	raw	management	decisions	Brian Armstrong (Coinbase) says he pushes decisions to a designated owner with short deadlines to keep work moving.	0	0	2026-10-28
+E-20261028-74d2	fact	concept	raw	business	storytelling	Ben Wilson (How to Take Over the World) says he presents varied biographies so listeners can find a relatable example that motivates action.	0	0	2026-10-28
 E-20261028-7959	fact	data	raw	agents,communication		HANDRAISER reports a 32% reduction in communication cost by learning when listeners should interrupt.	0	0	2026-10-28
+E-20261028-7a92	fact	concept	raw	management	compensation	Jason Fried (37signals) says he shares cash profits based on tenure so employees receive usable money rather than uncertain stock promises.	0	0	2026-10-28
 E-20261028-7ad9	fact	concept	raw	agents,tooling		The wshobson/agents repository is a collection of specialized coding-agent roles and workflows.	0	0	2026-10-28
 E-20261028-7b97	fact	data	raw	workflows,generation		Node selection with workflow compilation uses 55% of baseline prompt tokens in the reported DAG experiment.	0	0	2026-10-28
+E-20261028-7bed	fact	concept	raw	management	focus	Zach Dell (Base Power) says he centers strategy discussions on the constraint blocking the goal rather than what is going well.	0	0	2026-10-28
+E-20261028-7f3d	fact	concept	raw	business	distribution	Evan Spiegel (Snap) says he chose quickly built mobile products that friends would use because the App Store offered a viable distribution channel.	0	0	2026-10-28
 E-20261028-8069	fact	data	raw	llm,repair		Iterative self-repair adds about 5-17 points on HumanEval and 16-30 points on MBPP in the reported experiments.	0	0	2026-10-28
 E-20261028-8084	fact	concept	raw	llm,tool-use		Constrained decoding can improve tool selection while weakening abstention when no tool applies.	0	0	2026-10-28
+E-20261028-8095	fact	concept	raw	business	acquisitions	Alexander Taubman (Long Lake) says he keeps acquisition searches open across industries to uncover overlooked AI opportunities.	0	0	2026-10-28
 E-20261028-841f	fact	concept	raw	agents,memory		BASM can attach applicability conditions and avoidance rules to skills distilled from successful trajectories.	0	0	2026-10-28
 E-20261028-85fb	fact	data	raw	llm,repair		Feedback Over Form reports that cross-model repair corrupts 43 of 69 initially correct programs.	0	0	2026-10-28
 E-20261028-8635	fact	concept	raw	llm,routing		Deeper LLM cascades do not reliably improve held-out accuracy over an optimized model pair.	0	0	2026-10-28
+E-20261028-86a1	fact	concept	raw	business	production	Rick Rubin (American Recordings) says he adapted Beatles song structure to turn rap material into organized songs.	0	0	2026-10-28
+E-20261028-86fa	fact	concept	raw	business	focus	Jeff Zalaznick (Major Food Group) says he waited for the right Carbone space because the restaurant concept required a particular setting.	0	0	2026-10-28
+E-20261028-89d0	fact	concept	raw	business	communications	Lulu Cheng Meservey (Rostra) says she expects founders to own their story because early credibility rests on their personal reputation.	0	0	2026-10-28
 E-20261028-8aa6	fact	data	raw	agents,evaluation		PartHackBench reports mean score inflation of 0.252 across 15 tasks when partial credit retains historical milestones.	0	0	2026-10-28
+E-20261028-8b1d	fact	concept	raw	business	learning	Kurt MacAlpine (Corient) says he studies partnerships in other industries to borrow strengths and improve weaknesses in his own firm.	0	0	2026-10-28
 E-20261028-8b96	fact	concept	raw	development,databases		The pgx development setup can allocate independent database instances and ports for each checkout.	0	0	2026-10-28
 E-20261028-8d12	fact	concept	raw	agents,communication		Light Skills can pass structured findings, gates, and verdicts between research skills.	0	0	2026-10-28
+E-20261028-8ff5	fact	concept	raw	business	investing	Micky Malka (Ribbit Capital) says he screens prospective founder partners for scientific curiosity, conviction, partnership, ambition and ownership.	0	0	2026-10-28
 E-20261028-9078	fact	data	raw	agents,optimization		RRSI reports up to four point three points of improvement on out-of-distribution benchmarks over its initial harness.	0	0	2026-10-28
 E-20261028-90e0	fact	data	raw	llm,memory		At 128,000 history tokens, MemT-1.0-Nano reports 1.86x inference speed and 66-fold less persistent storage than full-context KV cache.	0	0	2026-10-28
+E-20261028-9194	fact	concept	raw	business	product	Sam Altman (OpenAI) says he released an imperfect ChatGPT early to learn from customer feedback.	0	0	2026-10-28
 E-20261028-9364	fact	data	raw	agents,tool-use		HEART ToolBench pass rate falls from about 75% to 16% when both tool interfaces and reusable primitives are removed.	0	0	2026-10-28
 E-20261028-942e	fact	concept	raw	llm,verification		Verifier ROC characteristics can determine how test-time sampling performance scales.	0	0	2026-10-28
+E-20261028-9492	fact	concept	raw	management	mentoring	Michael Ovitz (CAA) says he uses his own business mistakes to help younger people avoid repeating them.	0	0	2026-10-28
 E-20261028-95cd	fact	concept	raw	llm,evaluation		LLM judges can prefer outputs from their own model family after controlling for candidate quality.	0	0	2026-10-28
+E-20261028-9908	fact	concept	raw	business	design	Ivanka Trump (Trump Organization) says she tests architectural beauty against function because hotel guests must live in the spaces.	0	0	2026-10-28
+E-20261028-9a8e	fact	concept	raw	business	retail	Ronnie Fieg (Kith) says he invests in elaborate stores to give customers an experience worthy of their time and spending.	0	0	2026-10-28
+E-20261028-9c6b	fact	concept	raw	management	hiring	Tony Xu (DoorDash) says he used a customer acquisition task in interviews to test whether candidates could act with limited resources.	0	0	2026-10-28
+E-20261028-9d04	fact	concept	raw	management	mentoring	Micky Malka (Ribbit Capital) says he helps founders answer their own difficult questions instead of supplying the answer himself.	0	0	2026-10-28
+E-20261028-9eff	fact	concept	raw	management	organization	Travis Kalanick (Atoms / Uber) says management capacity limits how much of a company's ambitions it can execute.	0	0	2026-10-28
 E-20261028-9fd0	fact	data	raw	llm,training		Process-only reward training scores about 64% versus 54% for outcome-only rewards on the reported small-model math evaluation.	0	0	2026-10-28
 E-20261028-a0f3	fact	concept	raw	llm,decision-models		Kev can be fine-tuned on labeled decision examples and served through a TypeSafe-compatible API.	0	0	2026-10-28
+E-20261028-a599	fact	concept	raw	business	focus	David Heinemeier Hansson (37signals) says time constraints helped concentrate Basecamp development on essential work.	0	0	2026-10-28
 E-20261028-a5a1	fact	concept	raw	agents,verification		oh-my-claudecode can separate planning, execution, verification, and repair into workflow stages.	0	0	2026-10-28
 E-20261028-a654	fact	concept	raw	agents,memory		Agent KB can retrieve workflows during planning and diagnostic fixes after feedback.	0	0	2026-10-28
+E-20261028-a848	fact	concept	raw	management	hiring	Brad Jacobs (QXO) says he evaluates employees by imagining their resignation and noticing whether he feels relief or panic.	0	0	2026-10-28
+E-20261028-aa9d	fact	concept	raw	strategy		Sun Tzu, Weakness and Strength (虛實): military action succeeds by adapting to the enemy and striking weakness while avoiding strength.	0	0	2026-10-28
+E-20261028-ab7a	fact	concept	raw	management	simplicity	Luca Ferrari (Bending Spoons) says he puts the burden of proof on proposals that add organizational complexity.	0	0	2026-10-28
 E-20261028-ac7f	fact	concept	raw	llm,memory		MemT-1.0-Nano can retain conversational memory in a persistent hidden state rather than replaying the full history.	0	0	2026-10-28
+E-20261028-ad71	fact	concept	raw	business	funding	Peter Rahal (RXBAR / David) says he keeps consumer packaged goods capital efficient so he can focus on the business rather than fundraising.	0	0	2026-10-28
+E-20261028-ad91	fact	concept	raw	management	collaboration	Michael Ovitz (CAA) says he shares information across his business because colleagues need to succeed as a team.	0	0	2026-10-28
+E-20261028-ad98	fact	concept	raw	management	culture	Brian Armstrong (Coinbase) says he formalized company values so hiring could scale beyond his personal interviews.	0	0	2026-10-28
+E-20261028-ae5d	fact	concept	raw	management	feedback	Ed Catmull (Pixar) says he keeps Braintrust discussions centered on the film's problems rather than who is right.	0	0	2026-10-28
+E-20261028-af2c	fact	concept	raw	business	product	Gustav Söderström (Spotify) says he judges Spotify initiatives by whether users consider the time spent worthwhile afterward.	0	0	2026-10-28
 E-20261028-af33	fact	concept	raw	workflows,validation	n8n	n8n-MCP can validate node configurations and workflow structure without executing the workflow.	0	0	2026-10-28
+E-20261028-b181	fact	concept	raw	management	leadership	Doug Leone (Sequoia Capital) says he treats leading Sequoia as serving colleagues by getting them what they need to succeed.	0	0	2026-10-28
 E-20261028-b1e6	fact	concept	raw	llm,api		OpenCode Go can expose hosted models through OpenAI-compatible API endpoints.	0	0	2026-10-28
+E-20261028-b277	fact	concept	raw	management	training	James Dyson (Dyson) says he combines engineering study with paid work so students understand why they need the theory.	0	0	2026-10-28
 E-20261028-b291	fact	concept	raw	llm,communication		BabelTele can compress model-to-model text while preserving recoverable meaning for compatible model pairs.	0	0	2026-10-28
 E-20261028-b302	fact	concept	raw	llm,verification		An ensemble of weak judges and reward models can narrow the gap to an oracle verifier.	0	0	2026-10-28
 E-20261028-b470	fact	concept	raw	agents,memory		ExpeL can maintain reusable natural-language insights through additions, edits, and positive or negative votes.	0	0	2026-10-28
+E-20261028-b4b6	fact	concept	raw	business	automation	Scott Wu (Cognition) says he expects coding agents to make disposable task automation economical compared with hiring a development team.	0	0	2026-10-28
+E-20261028-b527	fact	concept	raw	business	acquisitions	Torsten Reil (Helsing) says he bought an aircraft manufacturer because partnering with an established prime would delay autonomous aircraft development.	0	0	2026-10-28
 E-20261028-b620	fact	concept	raw	development,coding		The Karpathy-style CLAUDE.md guide calls for minimal code changes limited to the requested task.	0	0	2026-10-28
 E-20261028-b78f	fact	concept	raw	agents,desktop	windows	Windows-MCP can give an agent desktop interaction and system-command capabilities on Windows.	0	0	2026-10-28
+E-20261028-b8d5	fact	concept	raw	business	partnerships	Dana White (UFC) says he kept producing fights during COVID to protect employees and preserve UFC's value to ESPN.	0	0	2026-10-28
+E-20261028-b983	fact	concept	raw	strategy		Sun Tzu, Varieties of Ground (九地): commanders must match their conduct to the army's strategic situation and its effect on soldiers.	0	0	2026-10-28
+E-20261028-bbc0	fact	concept	raw	business	customer-support	Michael Dell (Dell Technologies) says he uses a support guidance tool to help agents solve customer problems in fewer steps.	0	0	2026-10-28
+E-20261028-bc50	fact	concept	raw	business	differentiation	John Mackey (Whole Foods Market) says he differentiated Whole Foods with a natural food assortment customers could not find in conventional supermarkets.	0	0	2026-10-28
+E-20261028-bcf8	fact	concept	raw	business	capital-allocation	Brad Jacobs (QXO) says he expects a CEO to explain the operating levers behind the company's intended future stock value.	0	0	2026-10-28
 E-20261028-bd01	fact	concept	raw	llm,structured-output		Constrained decoding can ensure syntactic validity without reliably improving semantic accuracy in StructureBench.	0	0	2026-10-28
+E-20261028-bf01	fact	concept	raw	strategy		Sun Tzu, Attack by Fire (火攻): fire attacks require preparation and a response adapted to timing, wind and enemy behavior.	0	0	2026-10-28
+E-20261028-bf46	fact	concept	raw	business	focus	Sam Altman (OpenAI) says he doubled down on ChatGPT after Peter Thiel argued its flexible text interface justified focusing on its growth.	0	0	2026-10-28
+E-20261028-bfda	fact	concept	raw	management	organization	David Baszucki (Roblox) says he places safety disciplines under a designated leader who can make decisions across the function.	0	0	2026-10-28
+E-20261028-c035	fact	concept	raw	management	careers	Strauss Zelnick (TakeTwo Interactive) says employees should create more value than they cost the company.	0	0	2026-10-28
+E-20261028-c042	fact	concept	raw	management	hiring	Adam Foroughi (AppLovin) says he tests whether a vacancy needs refilling by asking how the business operates without that role.	0	0	2026-10-28
+E-20261028-c137	fact	concept	raw	business	focus	Ben Wilson (How to Take Over the World) says effective product decisions require identifying which features do not matter to the user experience.	0	0	2026-10-28
 E-20261028-c365	fact	concept	raw	agents,memory		ACE can update a context playbook by merging incremental edits instead of rewriting the entire context.	0	0	2026-10-28
 E-20261028-c849	fact	data	raw	agents,evaluation		On Randomness in Agentic Evals reports single-run pass@1 variation of two point two to six percentage points.	0	0	2026-10-28
 E-20261028-cab1	fact	concept	raw	workflows,typescript	n8n	The n8n workflow SDK can represent workflows as TypeScript programs.	0	0	2026-10-28
+E-20261028-cc72	fact	concept	raw	business	operations	Todd Graves (Raising Cane's) says he prefers operating with his own teams because franchisees may not share his intensity about the restaurant.	0	0	2026-10-28
+E-20261028-cee0	fact	concept	raw	business	customers	Michael Dell (Dell Technologies) says he uses direct customer feedback to keep iterating products and operations.	0	0	2026-10-28
 E-20261028-cfd0	fact	concept	raw	agents,automation		Grok Bot can run recurring support tasks through scheduled routines.	0	0	2026-10-28
+E-20261028-d3d3	fact	concept	raw	management	hiring	Jason Fried (37signals) says he reviews a new employee by asking whether he would hire that person again with what he now knows.	0	0	2026-10-28
+E-20261028-d6ec	fact	concept	raw	business	funding	David Heinemeier Hansson (37signals) says he is skeptical of venture funding because abundant money can spoil software's discipline of simplification.	0	0	2026-10-28
+E-20261028-dae9	fact	concept	raw	management	feedback	Dana White (UFC) says he gives the production truck immediate feedback so the team knows which experiments to retain.	0	0	2026-10-28
 E-20261028-daf7	fact	concept	raw	llm,verification		Verifier false positives can impose an accuracy ceiling on repeated resampling.	0	0	2026-10-28
+E-20261028-db94	fact	concept	raw	business	operations	Zach Dell (Base Power) says he integrates battery design and manufacturing to lower costs and overcome suppliers' capacity limits.	0	0	2026-10-28
+E-20261028-dc1f	fact	concept	raw	business	marketing	Steve Stoute (Translation / UnitedMasters) says he values customer identity and taste data because they make subsequent sales cheaper to market.	0	0	2026-10-28
 E-20261028-dc29	fact	concept	raw	agents,reasoning		Single agents can match or outperform multi-agent systems on multi-hop reasoning at equal thinking-token budgets.	0	0	2026-10-28
+E-20261028-dd2a	fact	concept	raw	management	delegation	Tobi Lütke (Shopify) says he clarifies teams' decision rights and how they can transfer risk to him or the company.	0	0	2026-10-28
 E-20261028-dde3	fact	data	raw	llm,inference		FlashMap reports up to six point one times lossless inference acceleration on Qwen3-8B.	0	0	2026-10-28
 E-20261028-e03a	fact	data	raw	agents,memory		Memory Transfer Learning reports a three point seven percent average performance improvement from cross-domain memory.	0	0	2026-10-28
 E-20261028-e03c	fact	data	raw	quantum-computing,agents		The reported Claude quantum-circuit search reduces a circuit design from 665 to 19 qubits.	0	0	2026-10-28
 E-20261028-e25c	fact	data	raw	llm,evaluation		ATLAS estimates HellaSwag ability from 41 of 5,600 items with a reported MAE of 0.157.	0	0	2026-10-28
+E-20261028-e25e	fact	concept	raw	business	incentives	Eric Jorgenson (Scribe Media) says outcome based contracts gave SpaceX an incentive to lower costs that cost plus contracts lacked.	0	0	2026-10-28
 E-20261028-e2f1	fact	concept	raw	agents,evaluation		Coding agents can edit tests or hardcode answers to reward-hack the EvilGenie evaluation.	0	0	2026-10-28
+E-20261028-e474	fact	concept	raw	management	organization	Mati Staniszewski (ElevenLabs) says he uses broad reporting spans to support a small team approach.	0	0	2026-10-28
+E-20261028-e649	fact	concept	raw	business	learning	Patrick O'Shaughnessy (Colossus) says naturally enjoyable activities are a useful base for skill development because they encourage repeated practice.	0	0	2026-10-28
+E-20261028-e652	fact	concept	raw	business	product	James Dyson (Dyson) says he pursued a new vacuum design because clogged bags undermined the performance he wanted as a user.	0	0	2026-10-28
 E-20261028-e66c	fact	concept	raw	llm,inference		Self-Refine and Reflexion do not outperform repeated sampling at equal token cost in the studied small models.	0	0	2026-10-28
 E-20261028-e787	fact	concept	raw	agents,tooling		DeepSeek Harness is a plugin-based coding-agent runtime with hooks for intercepting execution steps.	0	0	2026-10-28
 E-20261028-e94c	fact	data	raw	llm,evaluation		Sequential testing saves 80% of computation on the reported Open VLM Leaderboard evaluation.	0	0	2026-10-28
+E-20261028-ea28	fact	concept	raw	business	recruiting	Alexandr Wang (Meta) says he used a small new lab with Meta's resources as a recruiting proposition for researchers.	0	0	2026-10-28
+E-20261028-eaf2	fact	concept	raw	business	learning	Jimmy Iovine (Interscope / Beats) says he learned to produce records by closely observing how Lennon and Springsteen distinguished good work from great work.	0	0	2026-10-28
+E-20261028-ee71	fact	concept	raw	strategy		Sun Tzu, Waging War (作戰): prolonged campaigns exhaust the forces and resources needed for victory.	0	0	2026-10-28
+E-20261028-f28a	fact	concept	raw	business	business-model	Jeff Zalaznick (Major Food Group) says he uses private club subscriptions to make restaurant revenue more predictable.	0	0	2026-10-28
+E-20261028-f4ee	fact	concept	raw	business	communications	Lulu Cheng Meservey (Rostra) says she favors reaching the people who matter directly because intermediaries dilute a founder's message.	0	0	2026-10-28
 E-20261028-f688	fact	concept	raw	agents,prompting		The Felix Rieseberg interview advocates giving Claude goals and tool access to complete data.	0	0	2026-10-28
+E-20261028-f9db	fact	concept	raw	business	pricing	Travis Kalanick (Atoms / Uber) says he studied local transport economics in detail before setting Uber's launch prices in a city.	0	0	2026-10-28
+E-20261028-fa2e	fact	concept	raw	business	customers	Steve Stoute (Translation / UnitedMasters) says he builds artist customer relationship tools so musicians can manage a direct connection to fans.	0	0	2026-10-28
+E-20261028-fe02	fact	concept	raw	business	product	Tony Xu (DoorDash) says he responded to limited marketing funds by building for stronger retention and engagement.	0	0	2026-10-28
